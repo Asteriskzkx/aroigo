@@ -21,25 +21,28 @@ class Menuitem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            margin: EdgeInsets.only(top: 9, right: 10, left: 10),
-            padding: EdgeInsets.all(16),
+            padding: EdgeInsets.all(5),
             decoration: BoxDecoration(
               color: Color(0xFFFFB59A),
               shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 10,
-                  offset: Offset(0, 5),
-                ),
-              ],
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: Colors.black26,
+              //     blurRadius: 10,
+              //     offset: Offset(0, 5),
+              //   ),
+              // ],
             ),
             child: icon,
           ),
           SizedBox(height: 8),
           Text(
             title,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontFamily: 'SF Pro Display',
+              fontSize: 15,
+              color: Colors.black,
+            ),
           ),
         ],
       ),
