@@ -1,3 +1,4 @@
+import 'package:aroigo/screens/foodscreen.dart';
 import 'package:aroigo/widgets/bigroundedcard.dart';
 import 'package:aroigo/widgets/foodforyoucard.dart';
 import 'package:aroigo/widgets/menuitem.dart';
@@ -19,7 +20,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(title: Text('Home Screen')),
       body: Expanded(
         child: SingleChildScrollView(
           child: Column(
@@ -112,7 +112,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: 50,
                         height: 50,
                       ),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Foodscreen(),
+                          ),
+                        );
+                      },
                     ),
                   ),
                   Padding(
