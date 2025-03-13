@@ -1,5 +1,8 @@
 import 'package:aroigo/widgets/bigroundedcard.dart';
+import 'package:aroigo/widgets/foodforyoucard.dart';
 import 'package:aroigo/widgets/menuitem.dart';
+import 'package:aroigo/widgets/promotionscard.dart';
+import 'package:aroigo/widgets/restaurantscard.dart';
 import 'package:aroigo/widgets/roundedcard.dart';
 import 'package:flutter/material.dart';
 
@@ -196,21 +199,315 @@ class _HomeScreenState extends State<HomeScreen> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    Bigroundedcard(
-                      title: 'Order Now!',
-                      subtitle: 'Delicious and refreshing',
-                      imagePath: 'assets/images/soda.jpeg',
-                      onPressed: () {},
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16, right: 16),
+                      child: Bigroundedcard(
+                        title: 'Order Now!',
+                        subtitle: 'Delicious and refreshing',
+                        imagePath: 'assets/images/soda.jpeg',
+                        onPressed: () {},
+                      ),
                     ),
-                    Bigroundedcard(
-                      title: 'See more',
-                      subtitle: 'Not a Airpods',
-                      imagePath: 'assets/images/wf-1000xm5.jpg',
+                    Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: Bigroundedcard(
+                        title: 'See more',
+                        subtitle: 'Not a Airpods',
+                        imagePath: 'assets/images/wf-1000xm5.jpg',
+                        onPressed: () {},
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 34),
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.only(left: 16, right: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Restaurants you may like',
+                        style: TextStyle(
+                          fontFamily: 'SF Pro Display',
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.keyboard_arrow_right_rounded,
+                        color: Color(0XFF3D3D3D),
+                        size: 24,
+                      ),
                       onPressed: () {},
                     ),
                   ],
                 ),
               ),
+              SizedBox(height: 17),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16, right: 12),
+                      child: Restaurantscard(
+                        imagePath: 'assets/icons/knife.png',
+                        restaurantName:
+                            "Made to order, Auntie Bua's Kitchen - Pruksa B Village",
+                        distance: 9.2,
+                        rating: 4.4,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: Restaurantscard(
+                        imagePath: 'assets/icons/cooked-chicken.png',
+                        restaurantName: 'KFC - Big C Rangsit Klong 6',
+                        distance: 8.7,
+                        rating: 4.6,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: Restaurantscard(
+                        imagePath: 'assets/icons/coffee.png',
+                        restaurantName: 'Thai coffee - Khlong Luang 10',
+                        distance: 4.6,
+                        rating: 4.6,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: Restaurantscard(
+                        imagePath: 'assets/images/kitchen.png',
+                        restaurantName: 'Siam Spice',
+                        distance: 3.2,
+                        rating: 4.5,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: Restaurantscard(
+                        imagePath: 'assets/images/kitchen.png',
+                        restaurantName: 'Bangkok Bites',
+                        distance: 2.5,
+                        rating: 4.0,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: Restaurantscard(
+                        imagePath: 'assets/images/kitchen.png',
+                        restaurantName: 'Golden Lemongrass',
+                        distance: 4.8,
+                        rating: 5.0,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: Restaurantscard(
+                        imagePath: 'assets/images/kitchen.png',
+                        restaurantName: 'Thai Orchid Kitchen',
+                        distance: 5.5,
+                        rating: 4.2,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: Restaurantscard(
+                        imagePath: 'assets/images/kitchen.png',
+                        restaurantName: 'Street Wok Thai',
+                        distance: 1.8,
+                        rating: 4.1,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: Restaurantscard(
+                        imagePath: 'assets/images/kitchen.png',
+                        restaurantName: 'Chili Basil Express',
+                        distance: 2.9,
+                        rating: 3.8,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: Restaurantscard(
+                        imagePath: 'assets/images/kitchen.png',
+                        restaurantName: 'River Kwai Flavors',
+                        distance: 6.3,
+                        rating: 4.6,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: Restaurantscard(
+                        imagePath: 'assets/images/kitchen.png',
+                        restaurantName: 'Coconut Curry House',
+                        distance: 3.7,
+                        rating: 4.3,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: Restaurantscard(
+                        imagePath: 'assets/images/kitchen.png',
+                        restaurantName: 'Jasmine Rice Thai',
+                        distance: 4.5,
+                        rating: 3.5,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: Restaurantscard(
+                        imagePath: 'assets/images/kitchen.png',
+                        restaurantName: 'The Spicy Elephant',
+                        distance: 2.2,
+                        rating: 4.4,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 34),
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.only(left: 16, right: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Food for you',
+                        style: TextStyle(
+                          fontFamily: 'SF Pro Display',
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.keyboard_arrow_right_rounded,
+                        color: Color(0XFF3D3D3D),
+                        size: 24,
+                      ),
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16, right: 12),
+                      child: Foodforyoucard(
+                        imagePath: 'assets/icons/bubble-tea.png',
+                        restaurantName: 'HOP Chafe',
+                        productName: 'Taiwanese milk tea',
+                        cost: 29,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: Foodforyoucard(
+                        imagePath: 'assets/icons/bubble-tea (1).png',
+                        restaurantName: 'HOP Chafe',
+                        productName: 'Green tea',
+                        cost: 29,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: Foodforyoucard(
+                        imagePath: 'assets/icons/bubble-tea.png',
+                        restaurantName: 'Cafe Amazon',
+                        productName: 'Green tea milk shake',
+                        cost: 60,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: Foodforyoucard(
+                        imagePath: 'assets/icons/bubble-tea (1).png',
+                        restaurantName: 'Cafe Amazon',
+                        productName: 'Iced green tea milk',
+                        cost: 60,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 34),
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.only(left: 16, right: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Discover things you’d love',
+                      style: TextStyle(
+                        fontFamily: 'SF Pro Display',
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: double.infinity),
+                      child: Text(
+                        'Ad ·',
+                        style: TextStyle(
+                          fontFamily: 'SF Pro Display',
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0XFF676767),
+                        ),
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 17),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16, right: 20),
+                      child: Promotionscard(
+                        imagePath: 'assets/icons/promotion (1).png',
+                        promotionName: 'Promotion 1',
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: Promotionscard(
+                        imagePath: 'assets/icons/coupon.png',
+                        promotionName: 'Promotion 2',
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: Promotionscard(
+                        imagePath: 'assets/icons/coupons.png',
+                        promotionName: 'Promotion 3',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 34),
             ],
           ),
         ),

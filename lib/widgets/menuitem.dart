@@ -42,6 +42,7 @@ class Menuitem extends StatelessWidget {
               fontFamily: 'SF Pro Display',
               fontSize: 15,
               color: Colors.black,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ],
