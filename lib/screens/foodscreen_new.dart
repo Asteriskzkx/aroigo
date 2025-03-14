@@ -44,7 +44,7 @@ class _FoodscreenNew extends State<FoodscreenNew> {
           SliverAppBar(
             pinned: true,
             floating: true,
-            expandedHeight: 124.0,
+            expandedHeight: 134.0,
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
                 decoration: BoxDecoration(
