@@ -1,4 +1,5 @@
 import 'package:aroigo/screens/foodscreen.dart';
+import 'package:aroigo/screens/foodscreen_new.dart';
 import 'package:aroigo/widgets/bigroundedcard.dart';
 import 'package:aroigo/widgets/foodforyoucard.dart';
 import 'package:aroigo/widgets/menuitem.dart';
@@ -22,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: Expanded(
         child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Column(
             children: [
               Container(
@@ -116,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const Foodscreen(),
+                            builder: (context) => const FoodscreenNew(),
                           ),
                         );
                       },
@@ -131,7 +133,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: 50,
                         height: 50,
                       ),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const FoodscreenNew(),
+                          ),
+                        );
+                      },
                     ),
                   ),
                   Padding(
@@ -143,7 +152,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: 50,
                         height: 50,
                       ),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const FoodscreenNew(),
+                          ),
+                        );
+                      },
                     ),
                   ),
                   Padding(
@@ -155,7 +171,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: 50,
                         height: 50,
                       ),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const FoodscreenNew(),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],

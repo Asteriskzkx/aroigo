@@ -1,4 +1,5 @@
 import 'package:aroigo/screens/foodscreen.dart';
+import 'package:aroigo/screens/foodscreen_new.dart';
 import 'package:aroigo/screens/homescreen.dart';
 import 'package:aroigo/screens/homescreen_navi.dart';
 import 'package:flutter/material.dart';
