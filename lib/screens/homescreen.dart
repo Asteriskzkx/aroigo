@@ -81,6 +81,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 SizedBox(width: 10),
                                 Expanded(
                                   child: TextField(
+                                    style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontFamily: 'SF Pro Display',
+                                      color: Colors.black,
+                                    ),
                                     decoration: InputDecoration(
                                       hintText: 'Search Food',
                                       border: InputBorder.none,

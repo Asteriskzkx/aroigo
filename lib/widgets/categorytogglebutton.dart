@@ -78,9 +78,10 @@ class _Categorytogglebutton extends State<Categorytogglebutton> {
             child: Text(
               label,
               style: TextStyle(
-                color: isSelected ? Colors.orange : Colors.black,
+                color: Colors.black,
                 fontSize: 12,
                 fontFamily: 'SF Pro Display',
+                fontWeight: FontWeight.normal,
               ),
               softWrap: true,
               overflow: TextOverflow.ellipsis,

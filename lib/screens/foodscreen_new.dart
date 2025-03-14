@@ -1,4 +1,6 @@
+import 'package:aroigo/widgets/bigroundedcard.dart';
 import 'package:aroigo/widgets/categorytogglebutton.dart';
+import 'package:aroigo/widgets/promorestaurantcard.dart';
 import 'package:aroigo/widgets/togglebutton.dart';
 import 'package:flutter/material.dart';
 
@@ -63,6 +65,7 @@ class _FoodscreenNew extends State<FoodscreenNew> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              SizedBox(height: 10),
                               const Text(
                                 "DELIVER TO",
                                 style: TextStyle(
@@ -86,16 +89,41 @@ class _FoodscreenNew extends State<FoodscreenNew> {
                         ],
                       ),
                       SizedBox(height: 15),
-                      TextField(
-                        controller: _searchController,
-                        decoration: InputDecoration(
-                          // labelText: 'Search',
-                          prefixIcon: const Icon(Icons.search),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 10,
+                              offset: Offset(0, 5),
+                            ),
+                          ],
+                        ),
+                        child: TextField(
+                          controller: _searchController,
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.search),
+                            hintText: 'Search Food',
+                            hintStyle: TextStyle(
+                              fontSize: 16.0,
+                              fontFamily: 'SF Pro Display',
+                              color: Color(0xFFA3A3A3),
+                            ),
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: 12.0,
+                              horizontal: 16.0,
+                            ),
                           ),
-                          filled: true,
-                          fillColor: Colors.white,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontFamily: 'SF Pro Display',
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ],
@@ -124,6 +152,66 @@ class _FoodscreenNew extends State<FoodscreenNew> {
                       ),
                       const SizedBox(height: 6),
                       Categorytogglebutton(),
+                      const SizedBox(height: 13),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: 16,
+                                right: 16,
+                              ),
+                              child: Bigroundedcard(
+                                title: 'Hot Deals 22 - 31 March',
+                                subtitle: 'Apply ‘MEGA’ get up to',
+                                imagePath:
+                                    'assets/images/Pad-Kra-Pao-Thai-Basil-Minced-Pork.jpg',
+                                onPressed: () {},
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 16.0),
+                              child: Bigroundedcard(
+                                title: 'Best Value Deals!',
+                                subtitle: 'Apply ‘MEGA’ get up to',
+                                imagePath: 'assets/images/Khao khluk kapi.jpg',
+                                onPressed: () {},
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 25),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.only(left: 16, right: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'PROMO Resturants',
+                                style: TextStyle(
+                                  fontFamily: 'SF Pro Display',
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              icon: Icon(
+                                Icons.keyboard_arrow_right_rounded,
+                                color: Color(0XFF3D3D3D),
+                                size: 24,
+                              ),
+                              onPressed: () {},
+                            ),
+                          ],
+                        ),
+                      ),
+                      Promorestaurantcard(),
+                      const SizedBox(height: 75),
                     ],
                   );
                 }
