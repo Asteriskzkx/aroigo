@@ -139,17 +139,20 @@ class _RestaurantcardCol extends State<RestaurantcardCol> {
             crossAxisAlignment: CrossAxisAlignment.start,
             // mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text(
-                restaurantName,
-                style: TextStyle(
-                  fontFamily: 'SF Pro Display',
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 249.0),
+                child: Text(
+                  restaurantName,
+                  style: TextStyle(
+                    fontFamily: 'SF Pro Display',
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
-                softWrap: true,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
               ),
               SizedBox(height: 5),
               Row(

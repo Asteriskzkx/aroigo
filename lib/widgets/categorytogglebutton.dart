@@ -18,6 +18,14 @@ class _Categorytogglebutton extends State<Categorytogglebutton> {
     {'label': 'Coffee & Tea', 'icon': 'assets/icons/coffee-cup.png'},
     {'label': 'Small Bites/Snacks', 'icon': 'assets/icons/snack.png'},
     {'label': 'Noodles', 'icon': 'assets/icons/noodles.png'},
+    {'label': 'Fast Food', 'icon': 'assets/icons/burger.png'},
+    {'label': 'Fried Chicken', 'icon': 'assets/icons/chicken.png'},
+    {'label': 'Healthy', 'icon': 'assets/icons/healthy-food.png'},
+    {'label': 'Spicy Salad', 'icon': 'assets/icons/animals.png'},
+    {'label': 'Juice', 'icon': 'assets/icons/watermelon-juice.png'},
+    {'label': 'Bakery', 'icon': 'assets/icons/pastry.png'},
+    {'label': 'Bubble Tea', 'icon': 'assets/icons/bubble-tea.png'},
+    {'label': 'Yakiniku', 'icon': 'assets/icons/yakiniku.png'},
   ];
 
   @override
