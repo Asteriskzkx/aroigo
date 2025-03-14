@@ -1,3 +1,4 @@
+import 'package:aroigo/screens/activityscreen.dart';
 import 'package:aroigo/screens/homescreen.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,7 @@ class _HomescreenNavi extends State<HomescreenNavi> {
     1: {
       "title": "Activity",
       "icon": Icons.list_alt_outlined,
-      "screen": Container(),
+      "screen": Activityscreen(),
     },
     2: {"title": "Payment", "icon": Icons.wallet, "screen": Container()},
     3: {
