@@ -1,6 +1,7 @@
 import 'package:aroigo/widgets/bigroundedcard.dart';
 import 'package:aroigo/widgets/categorytogglebutton.dart';
 import 'package:aroigo/widgets/promorestaurantcard.dart';
+import 'package:aroigo/widgets/restaurantcard_col.dart';
 import 'package:aroigo/widgets/togglebutton.dart';
 import 'package:flutter/material.dart';
 
@@ -182,7 +183,7 @@ class _FoodscreenNew extends State<FoodscreenNew> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 25),
+                      const SizedBox(height: 13),
                       Container(
                         alignment: Alignment.centerLeft,
                         padding: EdgeInsets.only(left: 16, right: 16),
@@ -211,6 +212,8 @@ class _FoodscreenNew extends State<FoodscreenNew> {
                         ),
                       ),
                       Promorestaurantcard(),
+                      const SizedBox(height: 13),
+                      RestaurantcardCol(),
                       const SizedBox(height: 75),
                     ],
                   );

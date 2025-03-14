@@ -21,13 +21,9 @@ class Restaurantscard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: LayoutBuilder(
-        // Use LayoutBuilder
         builder: (context, constraints) {
           return ConstrainedBox(
-            // Use ConstrainedBox to limit height
-            constraints: BoxConstraints(
-              maxHeight: 220,
-            ), // Adjust maxHeight as needed
+            constraints: BoxConstraints(maxHeight: 220),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

@@ -105,71 +105,74 @@ class _Promorestaurantcard extends State<Promorestaurantcard> {
   ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(16.0),
-            child: Image.asset(
-              imagePath,
-              width: 147,
-              height: 147,
-              fit: BoxFit.cover,
+      child: GestureDetector(
+        onTap: () {},
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16.0),
+              child: Image.asset(
+                imagePath,
+                width: 147,
+                height: 147,
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          const SizedBox(height: 9),
-          Text(
-            'PROMO',
-            style: TextStyle(
-              color: Color(0XFFFF6B35),
-              fontFamily: 'SF Pro Display',
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 4),
-          ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 147),
-            child: Text(
-              restaurantName,
+            const SizedBox(height: 9),
+            Text(
+              'PROMO',
               style: TextStyle(
+                color: Color(0XFFFF6B35),
                 fontFamily: 'SF Pro Display',
-                color: Colors.black,
-                fontSize: 13,
+                fontSize: 12,
                 fontWeight: FontWeight.bold,
               ),
-              softWrap: true,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
             ),
-          ),
-          const SizedBox(height: 4),
-          Row(
-            children: [
-              Icon(Icons.delivery_dining, color: Colors.orange, size: 16),
-              const SizedBox(width: 4),
-              Text(
-                '$deliveryTime min',
+            const SizedBox(height: 4),
+            ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 147),
+              child: Text(
+                restaurantName,
                 style: TextStyle(
                   fontFamily: 'SF Pro Display',
-                  fontSize: 12,
-                  color: Color(0xFF676767),
+                  color: Colors.black,
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
                 ),
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
               ),
-              const SizedBox(width: 8),
-              Icon(Icons.location_on, color: Colors.orange, size: 16),
-              const SizedBox(width: 4),
-              Text(
-                '$distance km',
-                style: TextStyle(
-                  fontFamily: 'SF Pro Display',
-                  fontSize: 12,
-                  color: Color(0xFF676767),
+            ),
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                Icon(Icons.delivery_dining, color: Colors.orange, size: 16),
+                const SizedBox(width: 4),
+                Text(
+                  '$deliveryTime min',
+                  style: TextStyle(
+                    fontFamily: 'SF Pro Display',
+                    fontSize: 12,
+                    color: Color(0xFF676767),
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+                const SizedBox(width: 8),
+                Icon(Icons.location_on, color: Colors.orange, size: 16),
+                const SizedBox(width: 4),
+                Text(
+                  '$distance km',
+                  style: TextStyle(
+                    fontFamily: 'SF Pro Display',
+                    fontSize: 12,
+                    color: Color(0xFF676767),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
