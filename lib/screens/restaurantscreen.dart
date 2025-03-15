@@ -144,14 +144,14 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                   const SizedBox(height: 16),
 
                   // Menu Section Title
-                  const Text(
-                    'Today\'s Offer',
-                    style: TextStyle(
-                      fontFamily: 'SF Pro Display',
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  // const Text(
+                  //   'Today\'s Offer',
+                  //   style: TextStyle(
+                  //     fontFamily: 'SF Pro Display',
+                  //     fontSize: 18,
+                  //     fontWeight: FontWeight.bold,
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -345,6 +345,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
 
   Widget _buildCartBottomSheet() {
     return Container(
+      height: MediaQuery.of(context).size.height * 0.8, // Limit height
       padding: const EdgeInsets.all(16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -355,25 +356,65 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
           ),
           const SizedBox(height: 16),
 
-          // List of items in cart
-          if (_cart.isEmpty)
-            const Text('Your basket is empty')
-          else
-            Column(
-              children:
-                  _cart.entries.map((entry) {
-                    final item = entry.key;
-                    final quantity = entry.value;
-                    return ListTile(
-                      title: Text(item.name),
-                      subtitle: Text('${item.price} ฿ x $quantity'),
-                      trailing: Text(
-                        '${item.price * quantity} ฿',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+          // Scrollable list of cart items
+          Expanded(
+            child:
+                _cart.isEmpty
+                    ? const Center(
+                      child: Text(
+                        'Your basket is empty',
+                        style: TextStyle(color: Colors.grey, fontSize: 16),
                       ),
-                    );
-                  }).toList(),
-            ),
+                    )
+                    : SingleChildScrollView(
+                      child: Column(
+                        children:
+                            _cart.entries.map((entry) {
+                              final item = entry.key;
+                              final quantity = entry.value;
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 8.0,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            item.name,
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          Text(
+                                            '${item.price} ฿ x $quantity',
+                                            style: const TextStyle(
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Text(
+                                      '${item.price * quantity} ฿',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                      ),
+                    ),
+          ),
 
           const Divider(),
 
@@ -404,7 +445,6 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                 _cart.isEmpty
                     ? null
                     : () {
-                      // Navigate to Checkout Screen
                       Navigator.pop(context); // Close bottom sheet
                       Navigator.push(
                         context,
