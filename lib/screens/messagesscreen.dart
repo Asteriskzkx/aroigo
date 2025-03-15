@@ -10,17 +10,15 @@ class MessagesScreen extends StatefulWidget {
 class _MessagesScreenState extends State<MessagesScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  bool _showDeleteIcon = false; // Initially false since we start on Chats tab
+  bool _showDeleteIcon = false;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
 
-    // Listen for tab changes to update delete icon visibility
     _tabController.addListener(() {
       setState(() {
-        // Show delete icon only on Notifications tab (index 1)
         _showDeleteIcon = _tabController.index == 1;
       });
     });
@@ -47,7 +45,6 @@ class _MessagesScreenState extends State<MessagesScreen>
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
-          // Only show the delete icon when on Notifications tab
           if (_showDeleteIcon)
             IconButton(
               icon: const Icon(
@@ -55,15 +52,12 @@ class _MessagesScreenState extends State<MessagesScreen>
                 color: Colors.black,
                 size: 28,
               ),
-              onPressed: () {
-                // Handle delete action
-              },
+              onPressed: () {},
             ),
         ],
       ),
       body: Column(
         children: [
-          // Custom tab bar
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             height: 50, // Set a fixed height
@@ -75,7 +69,7 @@ class _MessagesScreenState extends State<MessagesScreen>
               controller: _tabController,
               // Use indicator size to cover the full tab
               indicator: BoxDecoration(
-                color: const Color(0xFF174F4B), // Dark green active tab
+                color: const Color(0XFFFF6B35), // Dark green active tab
                 borderRadius: BorderRadius.circular(25),
               ),
               // Make indicator cover full tab
@@ -107,13 +101,7 @@ class _MessagesScreenState extends State<MessagesScreen>
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: [
-                // Chats Tab Content
-                _buildChatsTab(),
-
-                // Notifications Tab Content
-                _buildNotificationsTab(),
-              ],
+              children: [_buildChatsTab(), _buildNotificationsTab()],
             ),
           ),
         ],
@@ -126,9 +114,8 @@ class _MessagesScreenState extends State<MessagesScreen>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Support specialist image
           Image.asset(
-            'assets/images/support_specialist.png',
+            'assets/images/customer-service.png',
             height: 150,
             width: 150,
             fit: BoxFit.contain,
@@ -136,11 +123,11 @@ class _MessagesScreenState extends State<MessagesScreen>
               return Container(
                 height: 150,
                 width: 150,
-                color: Colors.green.shade200,
+                color: Color(0XFFFF6B35).withOpacity(0.1),
                 child: Icon(
                   Icons.support_agent,
                   size: 80,
-                  color: Colors.green.shade700,
+                  color: Color(0XFFFF6B35),
                 ),
               );
             },
@@ -163,7 +150,7 @@ class _MessagesScreenState extends State<MessagesScreen>
                 TextSpan(
                   text: 'Help Centre',
                   style: TextStyle(
-                    color: Colors.green.shade400,
+                    color: Color(0XFFFF6B35),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -177,54 +164,107 @@ class _MessagesScreenState extends State<MessagesScreen>
   }
 
   Widget _buildNotificationsTab() {
-    // Sample notification data
     final List<Map<String, dynamic>> notifications = [
       {
-        'title': 'ชวนมาเสริมความมั่นใจไปกับ Sabina',
-        'subtitle': 'ใช้ 499 พอยต์ แลกรับส่วนลด 30%*',
+        'title': 'New restaurant partner: Sweet Basil',
+        'subtitle': 'Use 499 points for a 30% discount on your first order*',
         'time': '2:05 PM',
         'isUnread': true,
       },
       {
-        'title': '📢 ห้ามพลาด! มัดรวมโค้ดลดมาให้แ...',
-        'subtitle': 'มีแต่คุ้มกับคุ้ม คลิกดูได้เลย! 🔥',
+        'title': '📢 Don\'t miss! Bundle of meal vouchers...',
+        'subtitle': 'Great value meal deals, click to see more! 🔥',
         'time': '12:15 PM',
         'isUnread': true,
       },
       {
-        'title': '📢 ห้ามพลาด! มัดรวมโค้ดลดมาให้แ...',
-        'subtitle': 'มีแต่คุ้มกับคุ้ม คลิกดูได้เลย! 🔥',
+        'title': '📢 Limited time offer! Special meals...',
+        'subtitle': 'Value for your money, check out now! 🔥',
         'time': '12:14 PM',
         'isUnread': true,
       },
       {
-        'title': 'Free Carnation Condensed Milk with Ev...',
-        'subtitle': 'Ad · F&N Dairies (Thailand) Ltd.',
+        'title': 'Free Dessert with Every Main Course...',
+        'subtitle': 'Ad · Sweet Delights Bakery',
         'time': '',
         'isUnread': false,
         'isAd': true,
       },
       {
-        'title': '[Transport] ⬇️ GrabCar Saver U...',
-        'subtitle': 'ค่ารถถูกลง! ใส่โค้ด \'GUMEGA\' ลด 50%*🚗',
+        'title': '🍜 AroiGo Lunch Special Deal...',
+        'subtitle': 'Order lunch for less! Use code \'LUNCH\' for 50% off*🍽️',
         'time': '10:33 AM',
         'isUnread': true,
       },
       {
-        'title': '[Transport] ⬇️ GrabCar Saver U...',
-        'subtitle': 'ค่ารถถูกลง! ใส่โค้ด \'GUMEGA\' ลด 50%*🚗',
+        'title': '🍕 Weekend Pizza Party Discount...',
+        'subtitle':
+            'Perfect for gatherings! Use code \'WEEKEND\' for 40% off*🍕',
         'time': '10:33 AM',
         'isUnread': true,
       },
       {
-        'title': '🏁 GrabFood Mega Sale กลับมาแ...',
-        'subtitle': 'ทุกมื้อเริ่มต้น ฿19* ลดเพิ่ม 60%* ใส่โค้ด \'MEGA\'...',
+        'title': '🏁 AroiGo Mega Sale is back...',
+        'subtitle':
+            'Meals starting at \$5* with extra 60% off* code \'FOOD\'...',
         'time': '9:35 AM',
         'isUnread': true,
       },
       {
-        'title': '🏁 GrabFood Mega Sale กลับมาแ...',
-        'subtitle': 'ทุกมื้อเริ่มต้น ฿19* ลดเพิ่ม 60%* ใส่โค้ด \'MEGA\'...',
+        'title': '🍲 Local Restaurant Week on AroiGo...',
+        'subtitle': 'Support local chefs with 50% off using code \'LOCAL\'...',
+        'time': '9:33 AM',
+        'isUnread': true,
+      },
+      {
+        'title': '🍱 New Premium Restaurant Collection',
+        'subtitle': 'Discover fine dining at home with free delivery*',
+        'time': '2:05 PM',
+        'isUnread': true,
+      },
+      {
+        'title': '📢 Flash Sale! 1-hour deals on meals...',
+        'subtitle': 'Amazing deals on selected restaurants! 🔥',
+        'time': '12:15 PM',
+        'isUnread': true,
+      },
+      {
+        'title': '🍔 Fast food favorites at 40% off...',
+        'subtitle': 'Burgers, fries and more at great prices! 🔥',
+        'time': '12:14 PM',
+        'isUnread': true,
+      },
+      {
+        'title': 'Free Bubble Tea with Orders over \$15...',
+        'subtitle': 'Ad · Tea Time Cafe',
+        'time': '',
+        'isUnread': false,
+        'isAd': true,
+      },
+      {
+        'title': '🥘 Dinner Time Special Offers...',
+        'subtitle': 'Order dinner now with code \'DINNER\' for 45% off*🍽️',
+        'time': '10:33 AM',
+        'isUnread': true,
+      },
+      {
+        'title': '🍣 Sushi Day on AroiGo...',
+        'subtitle':
+            'All sushi restaurants with 30% off today! Code \'SUSHI\'*🍣',
+        'time': '10:33 AM',
+        'isUnread': true,
+      },
+      {
+        'title': '🥗 Healthy Eating Week is here...',
+        'subtitle':
+            'Fresh salads and healthy meals from \$6* with code \'HEALTH\'...',
+        'time': '9:35 AM',
+        'isUnread': true,
+      },
+      {
+        'title': '🔔 Your favorite restaurants miss you!',
+        'subtitle':
+            'Come back and enjoy 50% off your next order with \'BACK\'...',
         'time': '9:33 AM',
         'isUnread': true,
       },
@@ -291,9 +331,7 @@ class _MessagesScreenState extends State<MessagesScreen>
                   ),
               ],
             ),
-            onTap: () {
-              // Handle notification tap
-            },
+            onTap: () {},
           ),
         );
       },
