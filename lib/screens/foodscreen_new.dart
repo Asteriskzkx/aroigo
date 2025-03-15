@@ -1,5 +1,6 @@
 import 'package:aroigo/widgets/bigroundedcard.dart';
 import 'package:aroigo/widgets/categorytogglebutton.dart';
+import 'package:aroigo/widgets/filtersorting.dart';
 import 'package:aroigo/widgets/promorestaurantcard.dart';
 import 'package:aroigo/widgets/restaurantcard_col.dart';
 import 'package:aroigo/widgets/togglebutton.dart';
@@ -217,6 +218,7 @@ class _FoodscreenNew extends State<FoodscreenNew> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildCategoryHeader('$categoryName Restaurants'),
+              FilterSorting(onFilterSelected: (filterType) {}),
               const SizedBox(height: 16),
               _buildSafeWidget(() => RestaurantcardCol()),
             ],
@@ -228,6 +230,7 @@ class _FoodscreenNew extends State<FoodscreenNew> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildCategoryHeader('$categoryName Specials'),
+              FilterSorting(),
               const SizedBox(height: 16),
               _buildSafeWidget(() => RestaurantcardCol()),
             ],
