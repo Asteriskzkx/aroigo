@@ -183,56 +183,59 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
       ),
 
       // Floating Action Button for Cart
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          HapticFeedback.mediumImpact();
-
-          // Show cart details
-          showModalBottomSheet(
-            context: context,
-            builder: (context) => _buildCartBottomSheet(),
-          );
-        },
-        backgroundColor: const Color(0XFFFF6B35),
-        icon: Stack(
-          children: [
-            const Icon(Icons.shopping_cart, color: Colors.white),
-            if (_totalItems > 0)
-              Positioned(
-                right: 0,
-                top: 0,
-                child: Container(
-                  padding: const EdgeInsets.all(2),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  constraints: const BoxConstraints(
-                    minWidth: 16,
-                    minHeight: 16,
-                  ),
-                  child: Text(
-                    '$_totalItems',
-                    style: const TextStyle(
-                      color: Color(0XFFFF6B35),
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
+      floatingActionButton:
+          _totalItems > 0
+              ? Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                child: ElevatedButton(
+                  onPressed: () {
+                    HapticFeedback.mediumImpact();
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) => _buildCartBottomSheet(),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFFF6B35),
+                    minimumSize: const Size(double.infinity, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    textAlign: TextAlign.center,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.shopping_basket,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Basket • $_totalItems Item',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'SF Pro Display',
+                            ),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        '฿${_totalCost.toStringAsFixed(0)}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'SF Pro Display',
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-          ],
-        ),
-        label: Text(
-          'View Basket (${_totalCost.toStringAsFixed(0)} ฿)',
-          style: const TextStyle(
-            color: Colors.white,
-            fontFamily: 'SF Pro Display',
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
+              )
+              : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
@@ -313,7 +316,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '${item.price} ฿',
+                        '${item.price}',
                         style: const TextStyle(
                           fontFamily: 'SF Pro Display',
                           fontSize: 16,
@@ -352,7 +355,11 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
         children: [
           const Text(
             'Your Basket',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'SF Pro Display',
+            ),
           ),
           const SizedBox(height: 16),
 
@@ -363,7 +370,11 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                     ? const Center(
                       child: Text(
                         'Your basket is empty',
-                        style: TextStyle(color: Colors.grey, fontSize: 16),
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                          fontFamily: 'SF Pro Display',
+                        ),
                       ),
                     )
                     : SingleChildScrollView(
@@ -390,22 +401,25 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                             style: const TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
+                                              fontFamily: 'SF Pro Display',
                                             ),
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                           Text(
-                                            '${item.price} ฿ x $quantity',
+                                            '${item.price} x $quantity',
                                             style: const TextStyle(
                                               color: Colors.grey,
+                                              fontFamily: 'SF Pro Display',
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
                                     Text(
-                                      '${item.price * quantity} ฿',
+                                      '${item.price * quantity}',
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
+                                        fontFamily: 'SF Pro Display',
                                       ),
                                     ),
                                   ],
@@ -427,11 +441,12 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               Text(
-                '${_totalCost.toStringAsFixed(0)} ฿',
+                '฿${_totalCost.toStringAsFixed(0)}',
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Color(0XFFFF6B35),
+                  fontFamily: 'SF Pro Display',
                 ),
               ),
             ],
@@ -467,6 +482,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                 color: Colors.white,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
+                fontFamily: 'SF Pro Display',
               ),
             ),
           ),
@@ -501,7 +517,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                         item.image,
                         height: 250,
                         width: double.infinity,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.contain,
                       ),
                     ),
 
@@ -533,7 +549,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                '${item.price} ฿',
+                                '${item.price}',
                                 style: const TextStyle(
                                   fontFamily: 'SF Pro Display',
                                   fontSize: 22,
@@ -579,11 +595,14 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
       _cart[item] = (_cart[item] ?? 0) + 1;
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('${item.name} added to cart'),
-        duration: const Duration(seconds: 2),
-      ),
-    );
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   SnackBar(
+    //     content: Text(
+    //       '${item.name} added to cart',
+    //       style: TextStyle(fontFamily: 'SF Pro Display'),
+    //     ),
+    //     duration: const Duration(seconds: 2),
+    //   ),
+    // );
   }
 }
