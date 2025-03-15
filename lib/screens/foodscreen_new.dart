@@ -17,34 +17,411 @@ class FoodscreenNew extends StatefulWidget {
 class _FoodscreenNew extends State<FoodscreenNew> {
   final TextEditingController _searchController = TextEditingController();
   String _searchText = '';
+  int? _selectedCategoryIndex;
+  final PageController _pageController = PageController();
+  final Categorytogglebutton _categoryToggle = Categorytogglebutton();
+
+  // Track whether we're mounted to prevent setState after dispose
+  bool _isMounted = false;
 
   @override
   void initState() {
     super.initState();
+    _isMounted = true;
     _searchController.addListener(_onSearchChanged);
+
+    // Set _selectedCategoryIndex to null to show default page
+    _selectedCategoryIndex = null;
   }
 
   @override
   void dispose() {
+    _isMounted = false;
+    _searchController.removeListener(_onSearchChanged);
     _searchController.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
   void _onSearchChanged() {
+    if (_isMounted) {
+      setState(() {
+        _searchText = _searchController.text;
+      });
+    }
+  }
+
+  void _onCategorySelected(int? index) {
+    if (!_isMounted) return;
+
     setState(() {
-      _searchText = _searchController.text;
+      _selectedCategoryIndex = index;
     });
+
+    if (index == null) {
+      _showDefaultPage();
+    } else {
+      _showCategoryPage(index);
+    }
+  }
+
+  // Method to show specific category page
+  void _showCategoryPage(int index) {
+    if (_pageController.hasClients) {
+      _pageController.animateToPage(
+        index + 1, // +1 because default page is at index 0
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
+  // Method to show default page
+  void _showDefaultPage() {
+    if (_pageController.hasClients) {
+      _pageController.animateToPage(
+        0, // Default page is at index 0
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
+  // Handle page changes from navigation
+  void _onPageChanged(int page) {
+    if (!_isMounted) return;
+
+    setState(() {
+      if (page == 0) {
+        // Default page
+        _selectedCategoryIndex = null;
+      } else {
+        // Category page (adjusting for the default page offset)
+        _selectedCategoryIndex = page - 1;
+      }
+    });
+  }
+
+  // Build the default content when no category is selected
+  Widget _buildDefaultContent() {
+    return SingleChildScrollView(
+      key: ValueKey('default_page'),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Featured promotions section
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Text(
+              'Featured Promotions',
+              style: TextStyle(
+                fontFamily: 'SF Pro Display',
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+
+          // Horizontal scrolling promotions
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: _buildSafeWidget(
+                    () => Bigroundedcard(
+                      title: 'Special Deals',
+                      subtitle: 'Limited time offers',
+                      imagePath:
+                          'assets/images/Pad-Kra-Pao-Thai-Basil-Minced-Pork.jpg',
+                      onPressed: () {},
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: _buildSafeWidget(
+                    () => Bigroundedcard(
+                      title: 'New Restaurants',
+                      subtitle: 'Try something different',
+                      imagePath: 'assets/images/Khao khluk kapi.jpg',
+                      onPressed: () {},
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Popular restaurants section
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: Text(
+              'Popular Restaurants',
+              style: TextStyle(
+                fontFamily: 'SF Pro Display',
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          _buildSafeWidget(() => RestaurantcardCol()),
+
+          // Deals section
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: Text(
+              'Today\'s Best Deals',
+              style: TextStyle(
+                fontFamily: 'SF Pro Display',
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          _buildSafeWidget(() => Promorestaurantcard()),
+        ],
+      ),
+    );
+  }
+
+  // Build different content for each category tab with error handling
+  Widget _buildCategoryContent(int categoryIndex) {
+    try {
+      // Get the category name
+      String categoryName = "Category";
+      try {
+        if (_categoryToggle.categoryList.length > categoryIndex) {
+          categoryName = _categoryToggle.categoryList[categoryIndex]['label'];
+        }
+      } catch (e) {
+        // Fallback to using static category list if available
+        final List<Map<String, dynamic>> fallbackCategories = [
+          {'label': 'Cooked to Order', 'icon': 'assets/icons/cooking.png'},
+          {'label': 'Rice Bowls', 'icon': 'assets/icons/rice.png'},
+          {'label': 'Coffee & Tea', 'icon': 'assets/icons/coffee-cup.png'},
+          // Add more if needed
+        ];
+
+        if (fallbackCategories.length > categoryIndex) {
+          categoryName = fallbackCategories[categoryIndex]['label'];
+        }
+      }
+
+      // Create a simpler widget structure based on category
+      Widget content;
+
+      switch (categoryIndex) {
+        case 0: // Cooked to Order
+          content = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildCategoryHeader('$categoryName Restaurants'),
+              const SizedBox(height: 16),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16, right: 16),
+                      child: _buildSafeWidget(
+                        () => Bigroundedcard(
+                          title: 'Hot Deals 22 - 31 Mar',
+                          subtitle: 'Fresh from kitchen to you',
+                          imagePath:
+                              'assets/images/Pad-Kra-Pao-Thai-Basil-Minced-Pork.jpg',
+                          onPressed: () {},
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: _buildSafeWidget(
+                        () => Bigroundedcard(
+                          title: 'Best Value Deals!',
+                          subtitle: 'Fresh from kitchen to you',
+                          imagePath: 'assets/images/Khao khluk kapi.jpg',
+                          onPressed: () {},
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              _buildSafeWidget(() => RestaurantcardCol()),
+            ],
+          );
+          break;
+
+        case 1: // Rice Bowls
+          content = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildCategoryHeader('$categoryName Specials'),
+              const SizedBox(height: 13),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: _buildSafeWidget(
+                        () => Bigroundedcard(
+                          title: 'Rice Bowl Deals',
+                          subtitle: 'Special offers this week',
+                          imagePath: 'assets/images/Khao khluk kapi.jpg',
+                          onPressed: () {},
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              _buildSafeWidget(() => Promorestaurantcard()),
+            ],
+          );
+          break;
+
+        case 2: // Coffee & Tea
+          content = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildCategoryHeader('$categoryName Shops'),
+              const SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Popular Coffee Shops',
+                          style: TextStyle(
+                            fontFamily: 'SF Pro Display',
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        _buildCoffeeShopItem('Starbucks', '0.5 mi', 4.5),
+                        _buildCoffeeShopItem('Coffee World', '1.2 mi', 4.7),
+                        _buildCoffeeShopItem('Brew House', '0.8 mi', 4.2),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+          break;
+
+        default:
+          // Simplified default template
+          content = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildCategoryHeader(categoryName),
+              const SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(
+                      'Explore our selection of ${categoryName.toLowerCase()} options.',
+                      style: TextStyle(
+                        fontFamily: 'SF Pro Display',
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+      }
+
+      // Wrap content in a scroll view with key for better performance
+      return SingleChildScrollView(
+        key: ValueKey('category_$categoryIndex'),
+        child: content,
+      );
+    } catch (e) {
+      // Return a fallback widget if anything goes wrong
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            'Unable to load category content',
+            style: TextStyle(color: Colors.grey[600]),
+          ),
+        ),
+      );
+    }
+  }
+
+  // Safe widget builder to prevent crashes
+  Widget _buildSafeWidget(Widget Function() builder) {
+    try {
+      return builder();
+    } catch (e) {
+      return Container(
+        height: 100,
+        width: 200,
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Center(
+          child: Text(
+            'Widget unavailable',
+            style: TextStyle(color: Colors.grey[600]),
+          ),
+        ),
+      );
+    }
+  }
+
+  // Helper method for category headers
+  Widget _buildCategoryHeader(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontFamily: 'SF Pro Display',
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
+        physics: const NeverScrollableScrollPhysics(), // Prevent main scroll
         slivers: <Widget>[
           SliverAppBar(
             pinned: true,
             floating: true,
             expandedHeight: 134.0,
+            backgroundColor: Color(0XFFFF6B35),
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
                 decoration: BoxDecoration(
@@ -55,80 +432,78 @@ class _FoodscreenNew extends State<FoodscreenNew> {
                     end: Alignment.bottomRight,
                   ),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          SizedBox(width: 40),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: 10),
-                              const Text(
-                                "DELIVER TO",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 11,
-                                  fontFamily: 'SF Pro Display',
-                                  fontWeight: FontWeight.bold,
-                                ),
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        SizedBox(width: 40),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 10),
+                            const Text(
+                              "DELIVER TO",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 11,
+                                fontFamily: 'SF Pro Display',
+                                fontWeight: FontWeight.bold,
                               ),
-                              const Text(
-                                "Home",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                  fontFamily: 'SF Pro Display',
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            ),
+                            const Text(
+                              "Home",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontFamily: 'SF Pro Display',
+                                fontWeight: FontWeight.bold,
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 15),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black26,
-                              blurRadius: 10,
-                              offset: Offset(0, 5),
                             ),
                           ],
                         ),
-                        child: TextField(
-                          controller: _searchController,
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.search),
-                            hintText: 'Search Food',
-                            hintStyle: TextStyle(
-                              fontSize: 16.0,
-                              fontFamily: 'SF Pro Display',
-                              color: Color(0xFFA3A3A3),
-                            ),
-                            border: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 12.0,
-                              horizontal: 16.0,
-                            ),
+                      ],
+                    ),
+                    SizedBox(height: 15),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 10,
+                            offset: Offset(0, 5),
                           ),
-                          style: TextStyle(
+                        ],
+                      ),
+                      child: TextField(
+                        controller: _searchController,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.search),
+                          hintText: 'Search Food',
+                          hintStyle: TextStyle(
                             fontSize: 16.0,
                             fontFamily: 'SF Pro Display',
-                            color: Colors.black,
+                            color: Color(0xFFA3A3A3),
+                          ),
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 12.0,
+                            horizontal: 16.0,
                           ),
                         ),
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontFamily: 'SF Pro Display',
+                          color: Colors.black,
+                        ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
               titlePadding: EdgeInsets.zero,
@@ -138,99 +513,107 @@ class _FoodscreenNew extends State<FoodscreenNew> {
               child: Container(),
             ),
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                if (index == 0) {
-                  return Column(
+
+          // The rest of your sliver content
+          SliverFillRemaining(
+            hasScrollBody: true,
+            child: Column(
+              children: [
+                // Toggle buttons and category buttons
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  child: _buildSafeWidget(() => Togglebutton()),
+                ),
+                const SizedBox(height: 6),
+                _buildSafeWidget(
+                  () => Categorytogglebutton(
+                    onCategorySelected: _onCategorySelected,
+                    initialSelectedIndex: _selectedCategoryIndex,
+                  ),
+                ),
+                const SizedBox(height: 10),
+
+                // Instead of conditionally showing either default content or PageView,
+                // we now use a PageView with default content as the first page
+                Expanded(
+                  child: PageView(
+                    controller: _pageController,
+                    physics: NeverScrollableScrollPhysics(), // Disable swiping
+                    onPageChanged: _onPageChanged,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
-                        ),
-                        child: Togglebutton(),
+                      // First page is always the default page
+                      _buildDefaultContent(),
+                      // Then add all category pages
+                      ...List.generate(
+                        _categoryToggle.categoryList.length,
+                        (index) => _buildCategoryContent(index),
                       ),
-                      const SizedBox(height: 6),
-                      Categorytogglebutton(),
-                      const SizedBox(height: 13),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                left: 16,
-                                right: 16,
-                              ),
-                              child: Bigroundedcard(
-                                title: 'Hot Deals 22 - 31 March',
-                                subtitle: 'Apply ‘MEGA’ get up to',
-                                imagePath:
-                                    'assets/images/Pad-Kra-Pao-Thai-Basil-Minced-Pork.jpg',
-                                onPressed: () {},
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 16.0),
-                              child: Bigroundedcard(
-                                title: 'Best Value Deals!',
-                                subtitle: 'Apply ‘MEGA’ get up to',
-                                imagePath: 'assets/images/Khao khluk kapi.jpg',
-                                onPressed: () {},
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 13),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        padding: EdgeInsets.only(left: 16, right: 16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                'PROMO Resturants',
-                                style: TextStyle(
-                                  fontFamily: 'SF Pro Display',
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            IconButton(
-                              icon: Icon(
-                                Icons.keyboard_arrow_right_rounded,
-                                color: Color(0XFF3D3D3D),
-                                size: 24,
-                              ),
-                              onPressed: () {},
-                            ),
-                          ],
-                        ),
-                      ),
-                      Promorestaurantcard(),
-                      const SizedBox(height: 13),
-                      RestaurantcardCol(),
-                      const SizedBox(height: 75),
                     ],
-                  );
-                }
-                // final itemText = 'Item ${index - 1}';
-                // if (_searchText.isEmpty ||
-                //     itemText.toLowerCase().contains(
-                //       _searchText.toLowerCase(),
-                //     )) {
-                //   return ListTile(title: Text(itemText));
-                // } else {
-                //   return const SizedBox.shrink();
-                // }
-              },
-              // childCount:
-              //     101,
+                  ),
+                ),
+              ],
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Helper method to build coffee shop items
+  Widget _buildCoffeeShopItem(String name, String distance, double rating) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(Icons.coffee, color: Colors.brown),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: TextStyle(
+                    fontFamily: 'SF Pro Display',
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  distance,
+                  style: TextStyle(
+                    fontFamily: 'SF Pro Display',
+                    fontSize: 14,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Row(
+            children: [
+              Icon(Icons.star, color: Colors.amber, size: 18),
+              const SizedBox(width: 2),
+              Text(
+                rating.toString(),
+                style: TextStyle(
+                  fontFamily: 'SF Pro Display',
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
         ],
       ),

@@ -1,18 +1,10 @@
 import 'package:flutter/material.dart';
 
 class Categorytogglebutton extends StatefulWidget {
-  const Categorytogglebutton({super.key});
+  final Function(int?)? onCategorySelected;
+  final int? initialSelectedIndex;
 
-  @override
-  State<StatefulWidget> createState() {
-    return _Categorytogglebutton();
-  }
-}
-
-class _Categorytogglebutton extends State<Categorytogglebutton> {
-  int? _selectedIndex;
-
-  final List<Map<String, dynamic>> categories = [
+  static final List<Map<String, dynamic>> categories = [
     {'label': 'Cooked to Order', 'icon': 'assets/icons/cooking.png'},
     {'label': 'Rice Bowls', 'icon': 'assets/icons/rice.png'},
     {'label': 'Coffee & Tea', 'icon': 'assets/icons/coffee-cup.png'},
@@ -28,6 +20,29 @@ class _Categorytogglebutton extends State<Categorytogglebutton> {
     {'label': 'Yakiniku', 'icon': 'assets/icons/yakiniku.png'},
   ];
 
+  List<Map<String, dynamic>> get categoryList => categories;
+
+  const Categorytogglebutton({
+    super.key,
+    this.onCategorySelected,
+    this.initialSelectedIndex,
+  });
+
+  @override
+  State<StatefulWidget> createState() {
+    return _Categorytogglebutton();
+  }
+}
+
+class _Categorytogglebutton extends State<Categorytogglebutton> {
+  int? _selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialSelectedIndex;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -36,7 +51,7 @@ class _Categorytogglebutton extends State<Categorytogglebutton> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children:
-            categories.asMap().entries.map((entry) {
+            Categorytogglebutton.categories.asMap().entries.map((entry) {
               int index = entry.key;
               Map<String, dynamic> category = entry.value;
               return _buildToggleButton(
@@ -64,13 +79,16 @@ class _Categorytogglebutton extends State<Categorytogglebutton> {
                 } else {
                   _selectedIndex = index;
                 }
+                if (widget.onCategorySelected != null) {
+                  widget.onCategorySelected!(_selectedIndex);
+                }
               });
             },
             child: Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: isSelected ? Colors.orange : Colors.transparent,
+                  color: isSelected ? Color(0XFFFF6B35) : Colors.transparent,
                   width: 2.0,
                 ),
               ),
