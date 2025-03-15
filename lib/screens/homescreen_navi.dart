@@ -1,5 +1,6 @@
 import 'package:aroigo/screens/activityscreen.dart';
 import 'package:aroigo/screens/homescreen.dart';
+import 'package:aroigo/screens/messagesscreen.dart';
 import 'package:flutter/material.dart';
 
 class HomescreenNavi extends StatefulWidget {
@@ -25,7 +26,7 @@ class _HomescreenNavi extends State<HomescreenNavi> {
     3: {
       "title": "Messages",
       "icon": Icons.chat_bubble_outline,
-      "screen": Container(),
+      "screen": MessagesScreen(),
     },
     4: {"title": "Account", "icon": Icons.person, "screen": Container()},
   };
