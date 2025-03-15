@@ -1,5 +1,6 @@
 import 'package:aroigo/model/menu_model.dart';
 import 'package:aroigo/model/restaurant_model.dart';
+import 'package:aroigo/screens/checkoutscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -14,6 +15,19 @@ class RestaurantScreen extends StatefulWidget {
 }
 
 class _RestaurantScreenState extends State<RestaurantScreen> {
+  final Map<MenuItemModel, int> _cart = {};
+
+  int get _totalItems {
+    return _cart.values.fold(0, (sum, quantity) => sum + quantity);
+  }
+
+  double get _totalCost {
+    return _cart.entries.fold(
+      0.0,
+      (sum, entry) => sum + (entry.key.price * entry.value),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,21 +38,38 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
           SliverAppBar(
             expandedHeight: 250.0,
             pinned: true,
+            backgroundColor: const Color(0xFFFF6B35),
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(
-                widget.restaurant.name,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'SF Pro Display',
-                  fontWeight: FontWeight.bold,
+              title: Container(
+                color: Color(0xFFFF6B35),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                child: Text(
+                  widget.restaurant.name,
+                  style: TextStyle(
+                    color: const Color.fromARGB(255, 255, 255, 255),
+                    fontFamily: 'SF Pro Display',
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    shadows: [
+                      Shadow(
+                        blurRadius: 10.0,
+                        color: Colors.black.withOpacity(0.1),
+                        offset: Offset(0, 1),
+                      ),
+                    ],
+                  ),
+                  textAlign: TextAlign.left,
                 ),
               ),
               background: Image.asset(
                 widget.restaurant.imagePath,
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
-                    color: Colors.grey[300],
+                    color: Color(0xFFFF6B35),
                     child: const Center(
                       child: Icon(Icons.restaurant, color: Colors.grey),
                     ),
@@ -155,16 +186,47 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           HapticFeedback.mediumImpact();
-          // TODO: Implement cart functionality
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Cart feature coming soon!')),
+
+          // Show cart details
+          showModalBottomSheet(
+            context: context,
+            builder: (context) => _buildCartBottomSheet(),
           );
         },
         backgroundColor: const Color(0XFFFF6B35),
-        icon: const Icon(Icons.shopping_cart, color: Colors.white),
-        label: const Text(
-          'View Cart',
-          style: TextStyle(
+        icon: Stack(
+          children: [
+            const Icon(Icons.shopping_cart, color: Colors.white),
+            if (_totalItems > 0)
+              Positioned(
+                right: 0,
+                top: 0,
+                child: Container(
+                  padding: const EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  constraints: const BoxConstraints(
+                    minWidth: 16,
+                    minHeight: 16,
+                  ),
+                  child: Text(
+                    '$_totalItems',
+                    style: const TextStyle(
+                      color: Color(0XFFFF6B35),
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+          ],
+        ),
+        label: Text(
+          'View Basket (${_totalCost.toStringAsFixed(0)} ฿)',
+          style: const TextStyle(
             color: Colors.white,
             fontFamily: 'SF Pro Display',
             fontWeight: FontWeight.bold,
@@ -206,7 +268,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                 item.image,
                 height: 150,
                 width: double.infinity,
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
                     color: Colors.grey[300],
@@ -235,17 +297,17 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    item.description,
-                    style: const TextStyle(
-                      fontFamily: 'SF Pro Display',
-                      fontSize: 12,
-                      color: Colors.grey,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  // const SizedBox(height: 4),
+                  // Text(
+                  //   item.description,
+                  //   style: const TextStyle(
+                  //     fontFamily: 'SF Pro Display',
+                  //     fontSize: 12,
+                  //     color: Colors.grey,
+                  //   ),
+                  //   maxLines: 2,
+                  //   overflow: TextOverflow.ellipsis,
+                  // ),
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -277,6 +339,98 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildCartBottomSheet() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text(
+            'Your Basket',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+
+          // List of items in cart
+          if (_cart.isEmpty)
+            const Text('Your basket is empty')
+          else
+            Column(
+              children:
+                  _cart.entries.map((entry) {
+                    final item = entry.key;
+                    final quantity = entry.value;
+                    return ListTile(
+                      title: Text(item.name),
+                      subtitle: Text('${item.price} ฿ x $quantity'),
+                      trailing: Text(
+                        '${item.price * quantity} ฿',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    );
+                  }).toList(),
+            ),
+
+          const Divider(),
+
+          // Total summary
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Total',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                '${_totalCost.toStringAsFixed(0)} ฿',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0XFFFF6B35),
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 16),
+
+          // Checkout button
+          ElevatedButton(
+            onPressed:
+                _cart.isEmpty
+                    ? null
+                    : () {
+                      // Navigate to Checkout Screen
+                      Navigator.pop(context); // Close bottom sheet
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => CheckoutScreen(
+                                restaurant: widget.restaurant,
+                                cart: _cart,
+                              ),
+                        ),
+                      );
+                    },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0XFFFF6B35),
+              minimumSize: const Size(double.infinity, 50),
+            ),
+            child: const Text(
+              'Checkout',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -381,6 +535,10 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
   }
 
   void _addToCart(MenuItemModel item) {
+    setState(() {
+      _cart[item] = (_cart[item] ?? 0) + 1;
+    });
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('${item.name} added to cart'),
