@@ -1,5 +1,6 @@
 import 'package:aroigo/widgets/bigroundedcard.dart';
 import 'package:aroigo/widgets/categorytogglebutton.dart';
+import 'package:aroigo/widgets/cooked_to_order_restaurantcard_col.dart';
 import 'package:aroigo/widgets/filtersorting.dart';
 import 'package:aroigo/widgets/promorestaurantcard.dart';
 import 'package:aroigo/widgets/restaurantcard_col.dart';
@@ -220,7 +221,7 @@ class _FoodscreenNew extends State<FoodscreenNew> {
               _buildCategoryHeader('$categoryName Restaurants'),
               FilterSorting(onFilterSelected: (filterType) {}),
               const SizedBox(height: 16),
-              _buildSafeWidget(() => RestaurantcardCol()),
+              _buildSafeWidget(() => CookedToOrderRestaurantcardCol()),
             ],
           );
           break;
