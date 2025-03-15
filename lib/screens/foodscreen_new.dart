@@ -110,18 +110,18 @@ class _FoodscreenNew extends State<FoodscreenNew> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Featured promotions section
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Text(
-              'Featured Promotions',
-              style: TextStyle(
-                fontFamily: 'SF Pro Display',
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          const SizedBox(height: 8),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          //   child: Text(
+          //     'Featured Promotions',
+          //     style: TextStyle(
+          //       fontFamily: 'SF Pro Display',
+          //       fontSize: 20,
+          //       fontWeight: FontWeight.bold,
+          //     ),
+          //   ),
+          // ),
+          // const SizedBox(height: 8),
 
           // Horizontal scrolling promotions
           SingleChildScrollView(
@@ -154,21 +154,6 @@ class _FoodscreenNew extends State<FoodscreenNew> {
               ],
             ),
           ),
-
-          // Popular restaurants section
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            child: Text(
-              'Popular Restaurants',
-              style: TextStyle(
-                fontFamily: 'SF Pro Display',
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          _buildSafeWidget(() => RestaurantcardCol()),
-
           // Deals section
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -182,6 +167,19 @@ class _FoodscreenNew extends State<FoodscreenNew> {
             ),
           ),
           _buildSafeWidget(() => Promorestaurantcard()),
+          // Popular restaurants section
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: Text(
+              'Popular Restaurants',
+              style: TextStyle(
+                fontFamily: 'SF Pro Display',
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          _buildSafeWidget(() => RestaurantcardCol()),
         ],
       ),
     );
@@ -220,37 +218,6 @@ class _FoodscreenNew extends State<FoodscreenNew> {
             children: [
               _buildCategoryHeader('$categoryName Restaurants'),
               const SizedBox(height: 16),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16, right: 16),
-                      child: _buildSafeWidget(
-                        () => Bigroundedcard(
-                          title: 'Hot Deals 22 - 31 Mar',
-                          subtitle: 'Fresh from kitchen to you',
-                          imagePath:
-                              'assets/images/Pad-Kra-Pao-Thai-Basil-Minced-Pork.jpg',
-                          onPressed: () {},
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 16),
-                      child: _buildSafeWidget(
-                        () => Bigroundedcard(
-                          title: 'Best Value Deals!',
-                          subtitle: 'Fresh from kitchen to you',
-                          imagePath: 'assets/images/Khao khluk kapi.jpg',
-                          onPressed: () {},
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
               _buildSafeWidget(() => RestaurantcardCol()),
             ],
           );
@@ -261,27 +228,8 @@ class _FoodscreenNew extends State<FoodscreenNew> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildCategoryHeader('$categoryName Specials'),
-              const SizedBox(height: 13),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: _buildSafeWidget(
-                        () => Bigroundedcard(
-                          title: 'Rice Bowl Deals',
-                          subtitle: 'Special offers this week',
-                          imagePath: 'assets/images/Khao khluk kapi.jpg',
-                          onPressed: () {},
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
               const SizedBox(height: 16),
-              _buildSafeWidget(() => Promorestaurantcard()),
+              _buildSafeWidget(() => RestaurantcardCol()),
             ],
           );
           break;
@@ -398,14 +346,17 @@ class _FoodscreenNew extends State<FoodscreenNew> {
 
   // Helper method for category headers
   Widget _buildCategoryHeader(String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontFamily: 'SF Pro Display',
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
+    return Visibility(
+      visible: false,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Text(
+          title,
+          style: TextStyle(
+            fontFamily: 'SF Pro Display',
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
