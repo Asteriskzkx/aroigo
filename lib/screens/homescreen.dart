@@ -1,4 +1,3 @@
-import 'package:aroigo/screens/foodscreen.dart';
 import 'package:aroigo/screens/foodscreen_new.dart';
 import 'package:aroigo/widgets/bigroundedcard.dart';
 import 'package:aroigo/widgets/foodforyoucard.dart';
