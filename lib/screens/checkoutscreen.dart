@@ -6,9 +6,14 @@ import '../model/restaurant_model.dart';
 class CheckoutScreen extends StatefulWidget {
   final RestaurantModel restaurant;
   final Map<MenuItemModel, int> cart;
+  final Map<MenuItemModel, Map<String, dynamic>>? customizations;
 
-  const CheckoutScreen({Key? key, required this.restaurant, required this.cart})
-    : super(key: key);
+  const CheckoutScreen({
+    Key? key,
+    required this.restaurant,
+    required this.cart,
+    this.customizations,
+  }) : super(key: key);
 
   @override
   _CheckoutScreenState createState() => _CheckoutScreenState();
@@ -17,12 +22,22 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   bool _cutleryRequested = false;
 
-  // Calculate subtotal
+  // Calculate subtotal with customizations
   double get _subtotal {
-    return widget.cart.entries.fold(
-      0.0,
-      (sum, entry) => sum + (entry.key.price * entry.value),
-    );
+    return widget.cart.entries.fold(0.0, (sum, entry) {
+      final MenuItemModel item = entry.key;
+      final int quantity = entry.value;
+      double itemPrice = item.price;
+
+      // Add any customization costs
+      if (widget.customizations != null &&
+          widget.customizations!.containsKey(item) &&
+          widget.customizations![item]!.containsKey('additionalPrice')) {
+        itemPrice += widget.customizations![item]!['additionalPrice'];
+      }
+
+      return sum + (itemPrice * quantity);
+    });
   }
 
   // Calculate total (including potential delivery fee)
@@ -208,9 +223,75 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   Widget _buildOrderSummaryItem(MenuItemModel item, int quantity) {
-    return ListTile(
-      title: Text('$quantity x ${item.name}'),
-      trailing: Text('${item.price * quantity} ฿'),
+    // Get customization additional price if available
+    double additionalPrice = 0;
+    String customizationText = '';
+
+    if (widget.customizations != null &&
+        widget.customizations!.containsKey(item)) {
+      final customization = widget.customizations![item]!;
+
+      if (customization.containsKey('additionalPrice')) {
+        additionalPrice = customization['additionalPrice'];
+      }
+
+      // Build customization text
+      List<String> parts = [];
+
+      // Add meats
+      if (customization.containsKey('meats') &&
+          customization['meats'] != null) {
+        List<String> meats = List<String>.from(customization['meats']);
+        if (meats.isNotEmpty) {
+          parts.add(meats.join(', '));
+        }
+      }
+
+      // Add vegetables
+      if (customization.containsKey('vegetables') &&
+          customization['vegetables'] != null) {
+        List<String> vegetables = List<String>.from(
+          customization['vegetables'],
+        );
+        if (vegetables.isNotEmpty) {
+          parts.add(vegetables.join(', '));
+        }
+      }
+
+      // Add topping
+      if (customization.containsKey('topping') &&
+          customization['topping'] != null &&
+          customization['topping'].toString().isNotEmpty) {
+        parts.add(customization['topping']);
+      }
+
+      customizationText = parts.join(', ');
+    }
+
+    // Calculate item total price
+    double itemTotal = (item.price + additionalPrice) * quantity;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ListTile(
+          title: Text('$quantity x ${item.name}'),
+          trailing: Text('${itemTotal.toStringAsFixed(0)} ฿'),
+          contentPadding: EdgeInsets.zero,
+        ),
+        if (customizationText.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0, bottom: 8.0),
+            child: Text(
+              customizationText,
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontSize: 12,
+                fontFamily: 'SF Pro Display',
+              ),
+            ),
+          ),
+      ],
     );
   }
 
