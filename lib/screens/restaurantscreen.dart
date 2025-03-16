@@ -1,8 +1,10 @@
+import 'package:aroigo/data/customizationrepository.dart';
 import 'package:aroigo/model/menu_model.dart';
 import 'package:aroigo/model/restaurant_model.dart';
 import 'package:aroigo/screens/checkoutscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dynamic_menu_customization_screen.dart';
 
 class RestaurantScreen extends StatefulWidget {
   final RestaurantModel restaurant;
@@ -15,17 +17,23 @@ class RestaurantScreen extends StatefulWidget {
 }
 
 class _RestaurantScreenState extends State<RestaurantScreen> {
-  final Map<MenuItemModel, int> _cart = {};
+  final Map<MenuItemModel, Map<String, dynamic>> _cart = {};
 
   int get _totalItems {
-    return _cart.values.fold(0, (sum, quantity) => sum + quantity);
+    return _cart.length;
   }
 
   double get _totalCost {
-    return _cart.entries.fold(
-      0.0,
-      (sum, entry) => sum + (entry.key.price * entry.value),
-    );
+    return _cart.entries.fold(0.0, (sum, entry) {
+      double itemPrice = entry.key.price;
+
+      double additionalPrice = 0;
+      if (entry.value.containsKey('additionalPrice')) {
+        additionalPrice = entry.value['additionalPrice'];
+      }
+
+      return sum + itemPrice + additionalPrice;
+    });
   }
 
   @override
@@ -34,7 +42,6 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          // App Bar with Restaurant Image
           SliverAppBar(
             expandedHeight: 250.0,
             pinned: true,
@@ -82,24 +89,20 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                 icon: const Icon(Icons.favorite_border),
                 onPressed: () {
                   HapticFeedback.lightImpact();
-                  // TODO: Implement favorite functionality
                 },
               ),
             ],
           ),
 
-          // Restaurant Details Section
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Restaurant Info Row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Rating
                       Row(
                         children: [
                           const Icon(
@@ -119,7 +122,6 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                         ],
                       ),
 
-                      // Delivery and Distance Info
                       Row(
                         children: [
                           const Icon(
@@ -142,22 +144,11 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                   ),
 
                   const SizedBox(height: 16),
-
-                  // Menu Section Title
-                  // const Text(
-                  //   'Today\'s Offer',
-                  //   style: TextStyle(
-                  //     fontFamily: 'SF Pro Display',
-                  //     fontSize: 18,
-                  //     fontWeight: FontWeight.bold,
-                  //   ),
-                  // ),
                 ],
               ),
             ),
           ),
 
-          // Menu Items Grid
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             sliver: SliverGrid(
@@ -177,12 +168,10 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
             ),
           ),
 
-          // Bottom padding
           const SliverToBoxAdapter(child: SizedBox(height: 100)),
         ],
       ),
 
-      // Floating Action Button for Cart
       floatingActionButton:
           _totalItems > 0
               ? Container(
@@ -262,7 +251,6 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Menu Item Image
             ClipRRect(
               borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(15),
@@ -284,7 +272,6 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
               ),
             ),
 
-            // Menu Item Details
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -300,23 +287,12 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  // const SizedBox(height: 4),
-                  // Text(
-                  //   item.description,
-                  //   style: const TextStyle(
-                  //     fontFamily: 'SF Pro Display',
-                  //     fontSize: 12,
-                  //     color: Colors.grey,
-                  //   ),
-                  //   maxLines: 2,
-                  //   overflow: TextOverflow.ellipsis,
-                  // ),
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '${item.price}',
+                        '${item.price} ฿',
                         style: const TextStyle(
                           fontFamily: 'SF Pro Display',
                           fontSize: 16,
@@ -328,7 +304,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                         icon: const Icon(Icons.add, color: Colors.white),
                         onPressed: () {
                           HapticFeedback.lightImpact();
-                          _addToCart(item);
+                          _openCustomizationScreen(item);
                         },
                         style: IconButton.styleFrom(
                           backgroundColor: const Color(0XFFFF6B35),
@@ -348,7 +324,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
 
   Widget _buildCartBottomSheet() {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.8, // Limit height
+      height: MediaQuery.of(context).size.height * 0.8,
       padding: const EdgeInsets.all(16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -363,7 +339,6 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
           ),
           const SizedBox(height: 16),
 
-          // Scrollable list of cart items
           Expanded(
             child:
                 _cart.isEmpty
@@ -379,24 +354,92 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                     )
                     : SingleChildScrollView(
                       child: Column(
-                        children:
-                            _cart.entries.map((entry) {
-                              final item = entry.key;
-                              final quantity = entry.value;
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 8.0,
+                        children: [
+                          ...(_cart.entries.map((entry) {
+                            final item = entry.key;
+                            final customizations = entry.value;
+
+                            double itemTotal = item.price;
+                            if (customizations.containsKey('additionalPrice')) {
+                              itemTotal += customizations['additionalPrice'];
+                            }
+
+                            String customizationText = '';
+                            if (customizations.containsKey('meats') &&
+                                customizations['meats'] != null) {
+                              List<String> meats = List<String>.from(
+                                customizations['meats'],
+                              );
+                              if (meats.isNotEmpty) {
+                                customizationText += meats.join(', ');
+                              }
+                            }
+                            if (customizations.containsKey('vegetables') &&
+                                customizations['vegetables'] != null) {
+                              List<String> vegetables = List<String>.from(
+                                customizations['vegetables'],
+                              );
+                              if (vegetables.isNotEmpty) {
+                                customizationText +=
+                                    customizationText.isEmpty
+                                        ? vegetables.join(', ')
+                                        : ', ' + vegetables.join(', ');
+                              }
+                            }
+                            if (customizations.containsKey('topping') &&
+                                customizations['topping'] != null) {
+                              customizationText +=
+                                  customizationText.isEmpty
+                                      ? '${customizations['topping']}'
+                                      : ', ${customizations['topping']}';
+                            }
+
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 8.0,
+                              ),
+                              child: Dismissible(
+                                key: Key(item.id + DateTime.now().toString()),
+                                background: Container(
+                                  color: Colors.red,
+                                  alignment: Alignment.centerRight,
+                                  padding: const EdgeInsets.only(right: 20.0),
+                                  child: const Icon(
+                                    Icons.delete,
+                                    color: Colors.white,
+                                  ),
                                 ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                direction: DismissDirection.endToStart,
+                                onDismissed: (direction) {
+                                  setState(() {
+                                    _cart.remove(item);
+                                  });
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        '${item.name} removed from cart',
+                                      ),
+                                      duration: const Duration(seconds: 2),
+                                      action: SnackBarAction(
+                                        label: 'UNDO',
+                                        onPressed: () {
+                                          setState(() {
+                                            _cart[item] = customizations;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Text(
                                             item.name,
                                             style: const TextStyle(
                                               fontSize: 16,
@@ -405,40 +448,73 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                             ),
                                             overflow: TextOverflow.ellipsis,
                                           ),
-                                          Text(
-                                            '${item.price} x $quantity',
-                                            style: const TextStyle(
-                                              color: Colors.grey,
-                                              fontFamily: 'SF Pro Display',
-                                            ),
+                                        ),
+                                        Text(
+                                          '${itemTotal.toStringAsFixed(0)} ฿',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'SF Pro Display',
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
-                                    Text(
-                                      '${item.price * quantity}',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'SF Pro Display',
+                                    if (customizationText.isNotEmpty)
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          top: 4.0,
+                                        ),
+                                        child: Text(
+                                          customizationText,
+                                          style: const TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 14,
+                                            fontFamily: 'SF Pro Display',
+                                          ),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
-                                    ),
+                                    if (customizations.containsKey('note') &&
+                                        customizations['note'] != null &&
+                                        customizations['note']
+                                            .toString()
+                                            .isNotEmpty)
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          top: 4.0,
+                                        ),
+                                        child: Text(
+                                          'Note: ${customizations['note']}',
+                                          style: const TextStyle(
+                                            color: Colors.grey,
+                                            fontStyle: FontStyle.italic,
+                                            fontSize: 14,
+                                            fontFamily: 'SF Pro Display',
+                                          ),
+                                        ),
+                                      ),
                                   ],
                                 ),
-                              );
-                            }).toList(),
+                              ),
+                            );
+                          }).toList()),
+                        ],
                       ),
                     ),
           ),
 
           const Divider(),
 
-          // Total summary
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
                 'Total',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'SF Pro Display',
+                ),
               ),
               Text(
                 '฿${_totalCost.toStringAsFixed(0)}',
@@ -454,20 +530,26 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
 
           const SizedBox(height: 16),
 
-          // Checkout button
           ElevatedButton(
             onPressed:
                 _cart.isEmpty
                     ? null
                     : () {
-                      Navigator.pop(context); // Close bottom sheet
+                      Navigator.pop(context);
+
+                      final Map<MenuItemModel, int> simplifiedCart = {};
+                      _cart.forEach((item, customizations) {
+                        simplifiedCart[item] = 1;
+                      });
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder:
                               (context) => CheckoutScreen(
                                 restaurant: widget.restaurant,
-                                cart: _cart,
+                                cart: simplifiedCart,
+                                customizations: _cart,
                               ),
                         ),
                       );
@@ -508,7 +590,6 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                 (context, scrollController) => ListView(
                   controller: scrollController,
                   children: [
-                    // Item Image
                     ClipRRect(
                       borderRadius: const BorderRadius.vertical(
                         top: Radius.circular(20),
@@ -521,7 +602,6 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                       ),
                     ),
 
-                    // Item Details
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
@@ -549,7 +629,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                '${item.price}',
+                                '${item.price} ฿',
                                 style: const TextStyle(
                                   fontFamily: 'SF Pro Display',
                                   fontSize: 22,
@@ -560,8 +640,8 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                               ElevatedButton.icon(
                                 onPressed: () {
                                   HapticFeedback.mediumImpact();
-                                  _addToCart(item);
                                   Navigator.pop(context);
+                                  _openCustomizationScreen(item);
                                 },
                                 icon: const Icon(
                                   Icons.add_shopping_cart,
@@ -590,19 +670,43 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
     );
   }
 
-  void _addToCart(MenuItemModel item) {
-    setState(() {
-      _cart[item] = (_cart[item] ?? 0) + 1;
+  void _openCustomizationScreen(MenuItemModel item) {
+    final customizationOptions =
+        CustomizationRepository.getCustomizationOptions(item.id);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder:
+            (context) => DynamicMenuCustomizationScreen(
+              menuItem: item,
+              customizationOptions: customizationOptions,
+              onAddToCart: (menuItem, customizations) {
+                setState(() {
+                  _cart[menuItem] = customizations;
+                });
+              },
+            ),
+      ),
+    );
+  }
+
+  String buildCustomizationSummary(Map<String, dynamic> customizations) {
+    List<String> parts = [];
+
+    customizations.forEach((key, value) {
+      if (key == 'additionalPrice' || key == 'totalPrice' || key == 'note') {
+        return;
+      }
+
+      if (value is List && value.isNotEmpty) {
+        String category = key.replaceAll('_', ' ');
+        category = category[0].toUpperCase() + category.substring(1);
+
+        parts.add('$category: ${value.join(', ')}');
+      }
     });
 
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //   SnackBar(
-    //     content: Text(
-    //       '${item.name} added to cart',
-    //       style: TextStyle(fontFamily: 'SF Pro Display'),
-    //     ),
-    //     duration: const Duration(seconds: 2),
-    //   ),
-    // );
+    return parts.join(' | ');
   }
 }
