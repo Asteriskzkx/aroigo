@@ -4,6 +4,7 @@ import 'package:aroigo/widgets/cooked_to_order_restaurantcard_col.dart';
 import 'package:aroigo/widgets/filtersorting.dart';
 import 'package:aroigo/widgets/promorestaurantcard.dart';
 import 'package:aroigo/widgets/restaurantcard_col.dart';
+import 'package:aroigo/widgets/rice_bowls_restaurantcard_col.dart';
 import 'package:aroigo/widgets/togglebutton.dart';
 import 'package:flutter/material.dart';
 
@@ -233,7 +234,7 @@ class _FoodscreenNew extends State<FoodscreenNew> {
               _buildCategoryHeader('$categoryName Specials'),
               FilterSorting(),
               const SizedBox(height: 16),
-              _buildSafeWidget(() => RestaurantcardCol()),
+              _buildSafeWidget(() => RiceBowlsRestaurantcardCol()),
             ],
           );
           break;
