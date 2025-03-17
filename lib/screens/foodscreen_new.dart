@@ -1,5 +1,6 @@
 import 'package:aroigo/widgets/bigroundedcard.dart';
 import 'package:aroigo/widgets/categorytogglebutton.dart';
+import 'package:aroigo/widgets/coffee_and_tea_shop_col.dart';
 import 'package:aroigo/widgets/cooked_to_order_restaurantcard_col.dart';
 import 'package:aroigo/widgets/filtersorting.dart';
 import 'package:aroigo/widgets/promorestaurantcard.dart';
@@ -24,6 +25,7 @@ class _FoodscreenNew extends State<FoodscreenNew> {
   final PageController _pageController = PageController();
   final Categorytogglebutton _categoryToggle = Categorytogglebutton();
 
+  // Track whether we're mounted to prevent setState after dispose
   bool _isMounted = false;
 
   @override
@@ -32,6 +34,7 @@ class _FoodscreenNew extends State<FoodscreenNew> {
     _isMounted = true;
     _searchController.addListener(_onSearchChanged);
 
+    // Set _selectedCategoryIndex to null to show default page
     _selectedCategoryIndex = null;
   }
 
@@ -66,44 +69,65 @@ class _FoodscreenNew extends State<FoodscreenNew> {
     }
   }
 
+  // Method to show specific category page
   void _showCategoryPage(int index) {
     if (_pageController.hasClients) {
       _pageController.animateToPage(
-        index + 1,
+        index + 1, // +1 because default page is at index 0
         duration: Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
     }
   }
 
+  // Method to show default page
   void _showDefaultPage() {
     if (_pageController.hasClients) {
       _pageController.animateToPage(
-        0,
+        0, // Default page is at index 0
         duration: Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
     }
   }
 
+  // Handle page changes from navigation
   void _onPageChanged(int page) {
     if (!_isMounted) return;
 
     setState(() {
       if (page == 0) {
+        // Default page
         _selectedCategoryIndex = null;
       } else {
+        // Category page (adjusting for the default page offset)
         _selectedCategoryIndex = page - 1;
       }
     });
   }
 
+  // Build the default content when no category is selected
   Widget _buildDefaultContent() {
     return SingleChildScrollView(
       key: ValueKey('default_page'),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Featured promotions section
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          //   child: Text(
+          //     'Featured Promotions',
+          //     style: TextStyle(
+          //       fontFamily: 'SF Pro Display',
+          //       fontSize: 20,
+          //       fontWeight: FontWeight.bold,
+          //     ),
+          //   ),
+          // ),
+          // const SizedBox(height: 8),
+
+          // Horizontal scrolling promotions
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -134,6 +158,7 @@ class _FoodscreenNew extends State<FoodscreenNew> {
               ],
             ),
           ),
+          // Deals section
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: Text(
@@ -146,6 +171,7 @@ class _FoodscreenNew extends State<FoodscreenNew> {
             ),
           ),
           _buildSafeWidget(() => Promorestaurantcard()),
+          // Popular restaurants section
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: Text(
@@ -163,18 +189,22 @@ class _FoodscreenNew extends State<FoodscreenNew> {
     );
   }
 
+  // Build different content for each category tab with error handling
   Widget _buildCategoryContent(int categoryIndex) {
     try {
+      // Get the category name
       String categoryName = "Category";
       try {
         if (_categoryToggle.categoryList.length > categoryIndex) {
           categoryName = _categoryToggle.categoryList[categoryIndex]['label'];
         }
       } catch (e) {
+        // Fallback to using static category list if available
         final List<Map<String, dynamic>> fallbackCategories = [
           {'label': 'Cooked to Order', 'icon': 'assets/icons/cooking.png'},
           {'label': 'Rice Bowls', 'icon': 'assets/icons/rice.png'},
           {'label': 'Coffee & Tea', 'icon': 'assets/icons/coffee-cup.png'},
+          // Add more if needed
         ];
 
         if (fallbackCategories.length > categoryIndex) {
@@ -182,6 +212,7 @@ class _FoodscreenNew extends State<FoodscreenNew> {
         }
       }
 
+      // Create a simpler widget structure based on category
       Widget content;
 
       switch (categoryIndex) {
@@ -214,41 +245,27 @@ class _FoodscreenNew extends State<FoodscreenNew> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildCategoryHeader('$categoryName Shops'),
+              FilterSorting(),
               const SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Card(
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Popular Coffee Shops',
-                          style: TextStyle(
-                            fontFamily: 'SF Pro Display',
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        _buildCoffeeShopItem('Starbucks', '0.5 mi', 4.5),
-                        _buildCoffeeShopItem('Coffee World', '1.2 mi', 4.7),
-                        _buildCoffeeShopItem('Brew House', '0.8 mi', 4.2),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              _buildSafeWidget(() => CoffeeAndTeaShopCol()),
+            ],
+          );
+          break;
+
+        case 3: // Small Bites/Snacks
+          content = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildCategoryHeader('$categoryName Shops'),
+              FilterSorting(),
+              const SizedBox(height: 16),
+              _buildSafeWidget(() => CoffeeAndTeaShopCol()),
             ],
           );
           break;
 
         default:
+          // Simplified default template
           content = Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -277,11 +294,13 @@ class _FoodscreenNew extends State<FoodscreenNew> {
           );
       }
 
+      // Wrap content in a scroll view with key for better performance
       return SingleChildScrollView(
         key: ValueKey('category_$categoryIndex'),
         child: content,
       );
     } catch (e) {
+      // Return a fallback widget if anything goes wrong
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -294,6 +313,7 @@ class _FoodscreenNew extends State<FoodscreenNew> {
     }
   }
 
+  // Safe widget builder to prevent crashes
   Widget _buildSafeWidget(Widget Function() builder) {
     try {
       return builder();
@@ -315,6 +335,7 @@ class _FoodscreenNew extends State<FoodscreenNew> {
     }
   }
 
+  // Helper method for category headers
   Widget _buildCategoryHeader(String title) {
     return Visibility(
       visible: false,
@@ -336,7 +357,7 @@ class _FoodscreenNew extends State<FoodscreenNew> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
-        physics: const NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(), // Prevent main scroll
         slivers: <Widget>[
           SliverAppBar(
             pinned: true,
@@ -435,10 +456,12 @@ class _FoodscreenNew extends State<FoodscreenNew> {
             ),
           ),
 
+          // The rest of your sliver content
           SliverFillRemaining(
             hasScrollBody: true,
             child: Column(
               children: [
+                // Toggle buttons and category buttons
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
@@ -455,14 +478,17 @@ class _FoodscreenNew extends State<FoodscreenNew> {
                 ),
                 const SizedBox(height: 10),
 
+                // Instead of conditionally showing either default content or PageView,
+                // we now use a PageView with default content as the first page
                 Expanded(
                   child: PageView(
                     controller: _pageController,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: NeverScrollableScrollPhysics(), // Disable swiping
                     onPageChanged: _onPageChanged,
                     children: [
+                      // First page is always the default page
                       _buildDefaultContent(),
-
+                      // Then add all category pages
                       ...List.generate(
                         _categoryToggle.categoryList.length,
                         (index) => _buildCategoryContent(index),
@@ -478,6 +504,7 @@ class _FoodscreenNew extends State<FoodscreenNew> {
     );
   }
 
+  // Helper method to build coffee shop items
   Widget _buildCoffeeShopItem(String name, String distance, double rating) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
