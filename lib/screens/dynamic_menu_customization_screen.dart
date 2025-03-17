@@ -125,6 +125,7 @@ class _DynamicMenuCustomizationScreenState
             SnackBar(
               content: Text(
                 'Maximum ${maxSelections} selections allowed for this category',
+                style: TextStyle(fontFamily: 'SF Pro Display'),
               ),
               duration: const Duration(seconds: 2),
             ),
@@ -169,7 +170,10 @@ class _DynamicMenuCustomizationScreenState
     if (!isValid) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(errorMessage),
+          content: Text(
+            errorMessage,
+            style: TextStyle(fontFamily: 'SF Pro Display'),
+          ),
           backgroundColor: Colors.red,
           duration: const Duration(seconds: 2),
         ),
