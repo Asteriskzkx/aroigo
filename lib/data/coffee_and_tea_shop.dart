@@ -120,7 +120,7 @@ class CoffeeAndTeaShop {
       rating: 4.9,
       deliveryTime: 25,
       distance: 2.8,
-      imagePath: 'assets/images/coffee-shop.png',
+      imagePath: 'assets/images/restaurant (6).png',
       menu: [
         MenuItemModel(
           id: 'specialty_roast_siam_1',
@@ -165,7 +165,7 @@ class CoffeeAndTeaShop {
       rating: 4.7,
       deliveryTime: 15,
       distance: 1.9,
-      imagePath: 'assets/images/coffee-shop (1).png',
+      imagePath: 'assets/images/restaurant (5).png',
       menu: [
         MenuItemModel(
           id: 'butterfly_pea_haven_1',
@@ -211,7 +211,7 @@ class CoffeeAndTeaShop {
       rating: 4.5,
       deliveryTime: 20,
       distance: 2.4,
-      imagePath: 'assets/images/coffee-shop.png',
+      imagePath: 'assets/images/restaurant (4).png',
       menu: [
         MenuItemModel(
           id: 'herbal_brew_bangkok_1',
@@ -256,7 +256,7 @@ class CoffeeAndTeaShop {
       rating: 4.6,
       deliveryTime: 25,
       distance: 2.7,
-      imagePath: 'assets/images/coffee-shop (1).png',
+      imagePath: 'assets/images/restaurant (3).png',
       menu: [
         MenuItemModel(
           id: 'matcha_thai_fusion_1',
@@ -303,7 +303,7 @@ class CoffeeAndTeaShop {
       rating: 4.7,
       deliveryTime: 30,
       distance: 2.5,
-      imagePath: 'assets/images/coffee-shop.png',
+      imagePath: 'assets/images/restaurant (2).png',
       menu: [
         MenuItemModel(
           id: 'coffee_dessert_junction_1',
@@ -350,7 +350,7 @@ class CoffeeAndTeaShop {
       rating: 4.4,
       deliveryTime: 20,
       distance: 1.8,
-      imagePath: 'assets/images/coffee-shop (1).png',
+      imagePath: 'assets/images/restaurant (1).png',
       menu: [
         MenuItemModel(
           id: 'rustic_thai_cafe_1',
@@ -396,7 +396,7 @@ class CoffeeAndTeaShop {
       rating: 4.5,
       deliveryTime: 15,
       distance: 1.7,
-      imagePath: 'assets/images/coffee-shop.png',
+      imagePath: 'assets/images/restaurant.png',
       menu: [
         MenuItemModel(
           id: 'fruit_tea_oasis_1',
@@ -442,7 +442,7 @@ class CoffeeAndTeaShop {
       rating: 4.3,
       deliveryTime: 20,
       distance: 2.0,
-      imagePath: 'assets/images/coffee-shop (1).png',
+      imagePath: 'assets/images/coffee-shop.png',
       menu: [
         MenuItemModel(
           id: 'milk_tea_factory_1',
