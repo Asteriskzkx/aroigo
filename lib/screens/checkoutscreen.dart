@@ -1,3 +1,4 @@
+import 'package:aroigo/screens/order_confirmation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../model/menu_model.dart';
@@ -90,7 +91,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     style: TextStyle(fontFamily: 'SF Pro Display'),
                   ),
                   subtitle: const Text(
-                    '00/00',
+                    '00/00 Ban Uea Athorn Rangsit-Khlong 90/80',
                     style: TextStyle(fontFamily: 'SF Pro Display'),
                   ),
                   trailing: TextButton(
@@ -192,18 +193,52 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         child: ElevatedButton(
           onPressed: () {
             HapticFeedback.mediumImpact();
-            // TODO: Implement order placement
+
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text(
                   'Order placed successfully!',
                   style: TextStyle(fontFamily: 'SF Pro Display'),
                 ),
+                backgroundColor: Color(0xFFFF6B35),
+              ),
+            );
+
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder:
+                    (
+                      context,
+                      animation,
+                      secondaryAnimation,
+                    ) => OrderConfirmationScreen(
+                      restaurant: widget.restaurant,
+                      totalAmount: _total,
+                      orderId:
+                          'GF-${DateTime.now().millisecondsSinceEpoch.toString().substring(7, 10)}',
+                      deliveryAddress:
+                          '00/00 Ban Uea Athorn Rangsit-Khlong 90/80',
+                    ),
+                transitionsBuilder: (
+                  context,
+                  animation,
+                  secondaryAnimation,
+                  child,
+                ) {
+                  return SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(1.0, 0.0),
+                      end: Offset.zero,
+                    ).animate(animation),
+                    child: child,
+                  );
+                },
               ),
             );
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.green,
+            backgroundColor: Color(0xFFFF6B35),
             minimumSize: const Size(double.infinity, 50),
           ),
           child: const Text(
