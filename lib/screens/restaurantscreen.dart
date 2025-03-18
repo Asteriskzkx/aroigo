@@ -324,6 +324,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
 
   Widget _buildCartBottomSheet() {
     return Container(
+      // color: Colors.white,
       height: MediaQuery.of(context).size.height * 0.8,
       padding: const EdgeInsets.all(16),
       child: Column(
