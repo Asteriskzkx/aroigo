@@ -3,6 +3,7 @@ import 'package:aroigo/widgets/categorytogglebutton.dart';
 import 'package:aroigo/widgets/coffee_and_tea_shop_col.dart';
 import 'package:aroigo/widgets/cooked_to_order_restaurantcard_col.dart';
 import 'package:aroigo/widgets/filtersorting.dart';
+import 'package:aroigo/widgets/noodle_restaurant_col.dart';
 import 'package:aroigo/widgets/promorestaurantcard.dart';
 import 'package:aroigo/widgets/restaurantcard_col.dart';
 import 'package:aroigo/widgets/rice_bowls_restaurantcard_col.dart';
@@ -265,6 +266,18 @@ class _FoodscreenNew extends State<FoodscreenNew> {
           );
           break;
 
+        case 4: // Noodles
+          content = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildCategoryHeader('$categoryName Shops'),
+              FilterSorting(),
+              const SizedBox(height: 16),
+              _buildSafeWidget(() => NoodleRestaurantCol()),
+            ],
+          );
+          break;
+
         default:
           // Simplified default template
           content = Column(
@@ -499,64 +512,6 @@ class _FoodscreenNew extends State<FoodscreenNew> {
                 ),
               ],
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Helper method to build coffee shop items
-  Widget _buildCoffeeShopItem(String name, String distance, double rating) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        children: [
-          Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(Icons.coffee, color: Colors.brown),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: TextStyle(
-                    fontFamily: 'SF Pro Display',
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  distance,
-                  style: TextStyle(
-                    fontFamily: 'SF Pro Display',
-                    fontSize: 14,
-                    color: Colors.grey[600],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Row(
-            children: [
-              Icon(Icons.star, color: Colors.amber, size: 18),
-              const SizedBox(width: 2),
-              Text(
-                rating.toString(),
-                style: TextStyle(
-                  fontFamily: 'SF Pro Display',
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
           ),
         ],
       ),

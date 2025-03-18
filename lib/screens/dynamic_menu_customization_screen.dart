@@ -235,7 +235,7 @@ class _DynamicMenuCustomizationScreenState
               color: Colors.grey[200],
               image: DecorationImage(
                 image: AssetImage(widget.menuItem.image),
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
               ),
             ),
           ),
