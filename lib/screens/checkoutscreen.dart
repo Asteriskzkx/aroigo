@@ -9,14 +9,16 @@ class CheckoutScreen extends StatefulWidget {
   final Map<MenuItemModel, Map<String, dynamic>>? customizations;
 
   const CheckoutScreen({
-    Key? key,
+    super.key,
     required this.restaurant,
     required this.cart,
     this.customizations,
-  }) : super(key: key);
+  });
 
   @override
-  _CheckoutScreenState createState() => _CheckoutScreenState();
+  State<StatefulWidget> createState() {
+    return _CheckoutScreenState();
+  }
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
@@ -83,13 +85,22 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               _buildSectionHeader('Delivery'),
               Card(
                 child: ListTile(
-                  title: const Text('Home'),
-                  subtitle: const Text('00/00'),
+                  title: const Text(
+                    'Home',
+                    style: TextStyle(fontFamily: 'SF Pro Display'),
+                  ),
+                  subtitle: const Text(
+                    '00/00',
+                    style: TextStyle(fontFamily: 'SF Pro Display'),
+                  ),
                   trailing: TextButton(
                     onPressed: () {
                       // TODO: Implement address editing
                     },
-                    child: const Text('Edit'),
+                    child: const Text(
+                      'Edit',
+                      style: TextStyle(fontFamily: 'SF Pro Display'),
+                    ),
                   ),
                 ),
               ),
@@ -122,8 +133,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               // Cutlery Option
               const SizedBox(height: 16),
               SwitchListTile(
-                title: const Text('Cutlery'),
-                subtitle: const Text('Request for cutlery only if you need.'),
+                title: const Text(
+                  'Cutlery',
+                  style: TextStyle(fontFamily: 'SF Pro Display'),
+                ),
+                subtitle: const Text(
+                  'Request for cutlery only if you need.',
+                  style: TextStyle(fontFamily: 'SF Pro Display'),
+                ),
                 value: _cutleryRequested,
                 onChanged: (bool value) {
                   setState(() {
@@ -138,7 +155,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               Card(
                 child: ListTile(
                   leading: const Icon(Icons.money, color: Colors.green),
-                  title: const Text('B83.00'),
+                  title: const Text(
+                    'B83.00',
+                    style: TextStyle(fontFamily: 'SF Pro Display'),
+                  ),
                   trailing: Icon(Icons.chevron_right),
                   onTap: () {
                     // TODO: Implement payment method selection
@@ -151,7 +171,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               Card(
                 child: ListTile(
                   leading: const Icon(Icons.local_offer, color: Colors.red),
-                  title: const Text('Use Offers'),
+                  title: const Text(
+                    'Use Offers',
+                    style: TextStyle(fontFamily: 'SF Pro Display'),
+                  ),
                   trailing: Icon(Icons.chevron_right),
                   onTap: () {
                     // TODO: Implement offers
@@ -171,7 +194,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             HapticFeedback.mediumImpact();
             // TODO: Implement order placement
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Order placed successfully!')),
+              const SnackBar(
+                content: Text(
+                  'Order placed successfully!',
+                  style: TextStyle(fontFamily: 'SF Pro Display'),
+                ),
+              ),
             );
           },
           style: ElevatedButton.styleFrom(
@@ -184,6 +212,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               color: Colors.white,
               fontSize: 18,
               fontWeight: FontWeight.bold,
+              fontFamily: 'SF Pro Display',
             ),
           ),
         ),
@@ -202,7 +231,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               isActive ? const Color(0xFFFF6B35) : Colors.grey[300],
           foregroundColor: isActive ? Colors.white : Colors.black,
         ),
-        child: Text(text),
+        child: Text(text, style: TextStyle(fontFamily: 'SF Pro Display')),
       ),
     );
   }
@@ -210,15 +239,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget _buildSectionHeader(String text) {
     return Text(
       text,
-      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      style: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+        fontFamily: 'SF Pro Display',
+      ),
     );
   }
 
   Widget _buildDeliveryOptionTile(String title, String subtitle, String price) {
     return ListTile(
-      title: Text(title),
-      subtitle: Text(subtitle),
-      trailing: Text(price),
+      title: Text(title, style: TextStyle(fontFamily: 'SF Pro Display')),
+      subtitle: Text(subtitle, style: TextStyle(fontFamily: 'SF Pro Display')),
+      trailing: Text(price, style: TextStyle(fontFamily: 'SF Pro Display')),
     );
   }
 
@@ -275,8 +308,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ListTile(
-          title: Text('$quantity x ${item.name}'),
-          trailing: Text('${itemTotal.toStringAsFixed(0)} ฿'),
+          title: Text(
+            '$quantity x ${item.name}',
+            style: TextStyle(fontFamily: 'SF Pro Display'),
+          ),
+          trailing: Text(
+            '${itemTotal.toStringAsFixed(0)} ฿',
+            style: TextStyle(fontFamily: 'SF Pro Display'),
+          ),
           contentPadding: EdgeInsets.zero,
         ),
         if (customizationText.isNotEmpty)
@@ -300,7 +339,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [Text(label), Text(price)],
+        children: [
+          Text(label, style: TextStyle(fontFamily: 'SF Pro Display')),
+          Text(price, style: TextStyle(fontFamily: 'SF Pro Display')),
+        ],
       ),
     );
   }
@@ -313,7 +355,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         children: [
           Text(
             label,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              fontFamily: 'SF Pro Display',
+            ),
           ),
           Text(
             price,
@@ -321,6 +367,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               fontWeight: FontWeight.bold,
               fontSize: 16,
               color: Color(0xFFFF6B35),
+              fontFamily: 'SF Pro Display',
             ),
           ),
         ],

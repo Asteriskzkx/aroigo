@@ -8,15 +8,16 @@ class DynamicMenuCustomizationScreen extends StatefulWidget {
   final Function(MenuItemModel, Map<String, dynamic>) onAddToCart;
 
   const DynamicMenuCustomizationScreen({
-    Key? key,
+    super.key,
     required this.menuItem,
     required this.customizationOptions,
     required this.onAddToCart,
-  }) : super(key: key);
+  });
 
   @override
-  _DynamicMenuCustomizationScreenState createState() =>
-      _DynamicMenuCustomizationScreenState();
+  State<StatefulWidget> createState() {
+    return _DynamicMenuCustomizationScreenState();
+  }
 }
 
 class _DynamicMenuCustomizationScreenState
