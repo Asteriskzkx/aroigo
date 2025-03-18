@@ -85,6 +85,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               const SizedBox(height: 16),
               _buildSectionHeader('Delivery'),
               Card(
+                color: Colors.white,
                 child: ListTile(
                   title: const Text(
                     'Home',
@@ -109,9 +110,21 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               // Delivery Options
               const SizedBox(height: 16),
               _buildSectionHeader('Delivery Option'),
-              _buildDeliveryOptionTile('Priority', '< 45 mins', 'XX'),
-              _buildDeliveryOptionTile('Standard', '45 mins', 'XX'),
-              _buildDeliveryOptionTile('Saver', '55 mins', 'XX'),
+              _buildDeliveryOptionTile(
+                'Priority',
+                '< ${widget.restaurant.deliveryTime} mins',
+                'XX',
+              ),
+              _buildDeliveryOptionTile(
+                'Standard',
+                '${widget.restaurant.deliveryTime} mins',
+                'XX',
+              ),
+              _buildDeliveryOptionTile(
+                'Saver',
+                '${widget.restaurant.deliveryTime + 10} mins',
+                'XX',
+              ),
 
               // Order Summary
               const SizedBox(height: 16),
@@ -154,6 +167,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               const SizedBox(height: 16),
               _buildSectionHeader('Payment Details'),
               Card(
+                color: Colors.white,
                 child: ListTile(
                   leading: const Icon(Icons.money, color: Colors.green),
                   title: const Text(
@@ -170,6 +184,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               // Offers
               const SizedBox(height: 8),
               Card(
+                color: Colors.white,
                 child: ListTile(
                   leading: const Icon(Icons.local_offer, color: Colors.red),
                   title: const Text(
