@@ -2,6 +2,7 @@ import 'package:aroigo/widgets/bigroundedcard.dart';
 import 'package:aroigo/widgets/categorytogglebutton.dart';
 import 'package:aroigo/widgets/coffee_and_tea_shop_col.dart';
 import 'package:aroigo/widgets/cooked_to_order_restaurantcard_col.dart';
+import 'package:aroigo/widgets/fast_food_restaurant_col.dart';
 import 'package:aroigo/widgets/filtersorting.dart';
 import 'package:aroigo/widgets/noodle_restaurant_col.dart';
 import 'package:aroigo/widgets/promorestaurantcard.dart';
@@ -274,6 +275,18 @@ class _FoodscreenNew extends State<FoodscreenNew> {
               FilterSorting(),
               const SizedBox(height: 16),
               _buildSafeWidget(() => NoodleRestaurantCol()),
+            ],
+          );
+          break;
+
+        case 5: // Fast Food
+          content = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildCategoryHeader('$categoryName Shops'),
+              FilterSorting(),
+              const SizedBox(height: 16),
+              _buildSafeWidget(() => FastFoodRestaurantCol()),
             ],
           );
           break;
