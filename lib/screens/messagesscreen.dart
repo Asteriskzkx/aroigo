@@ -89,11 +89,11 @@ class _MessagesScreenState extends State<MessagesScreen>
               labelPadding: EdgeInsets.zero,
               tabs: [
                 // Use Tab with fixed width to ensure equal tab widths
-                Container(
+                SizedBox(
                   width: double.infinity,
                   child: const Tab(text: 'Chats'),
                 ),
-                Container(
+                SizedBox(
                   width: double.infinity,
                   child: const Tab(text: 'Notifications'),
                 ),
@@ -125,7 +125,7 @@ class _MessagesScreenState extends State<MessagesScreen>
               return Container(
                 height: 150,
                 width: 150,
-                color: Color(0XFFFF6B35).withOpacity(0.1),
+                color: Color(0XFFFF6B35).withAlpha((0.1 * 255).toInt()),
                 child: Icon(
                   Icons.support_agent,
                   size: 80,

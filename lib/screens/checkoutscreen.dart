@@ -129,11 +129,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               // Order Summary
               const SizedBox(height: 16),
               _buildSectionHeader('Order Summary'),
-              ...widget.cart.entries
-                  .map(
-                    (entry) => _buildOrderSummaryItem(entry.key, entry.value),
-                  )
-                  .toList(),
+              ...widget.cart.entries.map(
+                (entry) => _buildOrderSummaryItem(entry.key, entry.value),
+              ),
 
               // Subtotal and Delivery Fee
               const Divider(),

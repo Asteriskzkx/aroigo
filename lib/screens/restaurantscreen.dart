@@ -9,11 +9,12 @@ import 'dynamic_menu_customization_screen.dart';
 class RestaurantScreen extends StatefulWidget {
   final RestaurantModel restaurant;
 
-  const RestaurantScreen({Key? key, required this.restaurant})
-    : super(key: key);
+  const RestaurantScreen({super.key, required this.restaurant});
 
   @override
-  _RestaurantScreenState createState() => _RestaurantScreenState();
+  State<StatefulWidget> createState() {
+    return _RestaurantScreenState();
+  }
 }
 
 class _RestaurantScreenState extends State<RestaurantScreen> {
@@ -63,7 +64,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                     shadows: [
                       Shadow(
                         blurRadius: 10.0,
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withAlpha((0.1 * 255).toInt()),
                         offset: Offset(0, 1),
                       ),
                     ],
@@ -241,7 +242,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
+              color: Colors.grey.withAlpha((0.2 * 255).toInt()),
               spreadRadius: 2,
               blurRadius: 5,
               offset: const Offset(0, 3),
@@ -384,7 +385,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                 customizationText +=
                                     customizationText.isEmpty
                                         ? vegetables.join(', ')
-                                        : ', ' + vegetables.join(', ');
+                                        : ', ${vegetables.join(', ')}';
                               }
                             }
                             if (customizations.containsKey('topping') &&

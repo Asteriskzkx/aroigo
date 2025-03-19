@@ -125,7 +125,7 @@ class _DynamicMenuCustomizationScreenState
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                'Maximum ${maxSelections} selections allowed for this category',
+                'Maximum $maxSelections selections allowed for this category',
                 style: TextStyle(fontFamily: 'SF Pro Display'),
               ),
               duration: const Duration(seconds: 2),
@@ -290,7 +290,7 @@ class _DynamicMenuCustomizationScreenState
           borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
+              color: Colors.grey.withAlpha((0.3 * 255).toInt()),
               spreadRadius: 1,
               blurRadius: 5,
               offset: const Offset(0, -2),
