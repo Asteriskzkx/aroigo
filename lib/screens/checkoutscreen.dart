@@ -25,14 +25,12 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   bool _cutleryRequested = false;
 
-  // Calculate subtotal with customizations
   double get _subtotal {
     return widget.cart.entries.fold(0.0, (sum, entry) {
       final MenuItemModel item = entry.key;
       final int quantity = entry.value;
       double itemPrice = item.price;
 
-      // Add any customization costs
       if (widget.customizations != null &&
           widget.customizations!.containsKey(item) &&
           widget.customizations![item]!.containsKey('additionalPrice')) {
@@ -43,9 +41,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     });
   }
 
-  // Calculate total (including potential delivery fee)
   double get _total {
-    return _subtotal; // Add delivery fee logic here if needed
+    return _subtotal;
   }
 
   @override
@@ -72,7 +69,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Delivery/Pickup Toggle
               Row(
                 children: [
                   _buildToggleButton('Delivery', true),
@@ -81,7 +77,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ],
               ),
 
-              // Delivery Address
               const SizedBox(height: 16),
               _buildSectionHeader('Delivery'),
               Card(
@@ -107,7 +102,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
               ),
 
-              // Delivery Options
               const SizedBox(height: 16),
               _buildSectionHeader('Delivery Option'),
               _buildDeliveryOptionTile(
@@ -126,23 +120,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 'XX',
               ),
 
-              // Order Summary
               const SizedBox(height: 16),
               _buildSectionHeader('Order Summary'),
               ...widget.cart.entries.map(
                 (entry) => _buildOrderSummaryItem(entry.key, entry.value),
               ),
 
-              // Subtotal and Delivery Fee
               const Divider(),
               _buildPriceRow('Subtotal', '${_subtotal.toStringAsFixed(0)} ฿'),
               _buildPriceRow('Delivery fee', 'XX'),
 
-              // Total
               const Divider(),
               _buildPriceTotalRow('Total', '${_total.toStringAsFixed(0)} ฿'),
 
-              // Cutlery Option
               const SizedBox(height: 16),
               SwitchListTile(
                 title: const Text(
@@ -161,7 +151,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 },
               ),
 
-              // Payment Details
               const SizedBox(height: 16),
               _buildSectionHeader('Payment Details'),
               Card(
@@ -179,7 +168,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
               ),
 
-              // Offers
               const SizedBox(height: 8),
               Card(
                 color: Colors.white,
@@ -200,7 +188,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         ),
       ),
 
-      // Place Order Button
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
@@ -304,7 +291,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   Widget _buildOrderSummaryItem(MenuItemModel item, int quantity) {
-    // Get customization additional price if available
     double additionalPrice = 0;
     String customizationText = '';
 
@@ -316,10 +302,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         additionalPrice = customization['additionalPrice'];
       }
 
-      // Build customization text
       List<String> parts = [];
 
-      // Add meats
       if (customization.containsKey('meats') &&
           customization['meats'] != null) {
         List<String> meats = List<String>.from(customization['meats']);
@@ -328,7 +312,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         }
       }
 
-      // Add vegetables
       if (customization.containsKey('vegetables') &&
           customization['vegetables'] != null) {
         List<String> vegetables = List<String>.from(
@@ -339,7 +322,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         }
       }
 
-      // Add topping
       if (customization.containsKey('topping') &&
           customization['topping'] != null &&
           customization['topping'].toString().isNotEmpty) {
@@ -349,7 +331,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       customizationText = parts.join(', ');
     }
 
-    // Calculate item total price
     double itemTotal = (item.price + additionalPrice) * quantity;
 
     return Column(

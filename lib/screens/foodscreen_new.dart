@@ -5,6 +5,8 @@ import 'package:aroigo/widgets/cooked_to_order_restaurantcard_col.dart';
 import 'package:aroigo/widgets/fast_food_restaurant_col.dart';
 import 'package:aroigo/widgets/filtersorting.dart';
 import 'package:aroigo/widgets/fried_chicken_restaurant_col.dart';
+import 'package:aroigo/widgets/healthy_restaurant_col.dart';
+import 'package:aroigo/widgets/juice_restaurant_col.dart';
 import 'package:aroigo/widgets/noodle_restaurant_col.dart';
 import 'package:aroigo/widgets/promorestaurantcard.dart';
 import 'package:aroigo/widgets/restaurantcard_col.dart';
@@ -29,7 +31,6 @@ class _FoodscreenNew extends State<FoodscreenNew> {
   final PageController _pageController = PageController();
   final Categorytogglebutton _categoryToggle = Categorytogglebutton();
 
-  // Track whether we're mounted to prevent setState after dispose
   bool _isMounted = false;
 
   @override
@@ -38,7 +39,6 @@ class _FoodscreenNew extends State<FoodscreenNew> {
     _isMounted = true;
     _searchController.addListener(_onSearchChanged);
 
-    // Set _selectedCategoryIndex to null to show default page
     _selectedCategoryIndex = null;
   }
 
@@ -73,65 +73,44 @@ class _FoodscreenNew extends State<FoodscreenNew> {
     }
   }
 
-  // Method to show specific category page
   void _showCategoryPage(int index) {
     if (_pageController.hasClients) {
       _pageController.animateToPage(
-        index + 1, // +1 because default page is at index 0
+        index + 1,
         duration: Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
     }
   }
 
-  // Method to show default page
   void _showDefaultPage() {
     if (_pageController.hasClients) {
       _pageController.animateToPage(
-        0, // Default page is at index 0
+        0,
         duration: Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
     }
   }
 
-  // Handle page changes from navigation
   void _onPageChanged(int page) {
     if (!_isMounted) return;
 
     setState(() {
       if (page == 0) {
-        // Default page
         _selectedCategoryIndex = null;
       } else {
-        // Category page (adjusting for the default page offset)
         _selectedCategoryIndex = page - 1;
       }
     });
   }
 
-  // Build the default content when no category is selected
   Widget _buildDefaultContent() {
     return SingleChildScrollView(
       key: ValueKey('default_page'),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Featured promotions section
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          //   child: Text(
-          //     'Featured Promotions',
-          //     style: TextStyle(
-          //       fontFamily: 'SF Pro Display',
-          //       fontSize: 20,
-          //       fontWeight: FontWeight.bold,
-          //     ),
-          //   ),
-          // ),
-          // const SizedBox(height: 8),
-
-          // Horizontal scrolling promotions
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -162,7 +141,6 @@ class _FoodscreenNew extends State<FoodscreenNew> {
               ],
             ),
           ),
-          // Deals section
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: Text(
@@ -175,7 +153,6 @@ class _FoodscreenNew extends State<FoodscreenNew> {
             ),
           ),
           _buildSafeWidget(() => Promorestaurantcard()),
-          // Popular restaurants section
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: Text(
@@ -193,22 +170,18 @@ class _FoodscreenNew extends State<FoodscreenNew> {
     );
   }
 
-  // Build different content for each category tab with error handling
   Widget _buildCategoryContent(int categoryIndex) {
     try {
-      // Get the category name
       String categoryName = "Category";
       try {
         if (_categoryToggle.categoryList.length > categoryIndex) {
           categoryName = _categoryToggle.categoryList[categoryIndex]['label'];
         }
       } catch (e) {
-        // Fallback to using static category list if available
         final List<Map<String, dynamic>> fallbackCategories = [
           {'label': 'Cooked to Order', 'icon': 'assets/icons/cooking.png'},
           {'label': 'Rice Bowls', 'icon': 'assets/icons/rice.png'},
           {'label': 'Coffee & Tea', 'icon': 'assets/icons/coffee-cup.png'},
-          // Add more if needed
         ];
 
         if (fallbackCategories.length > categoryIndex) {
@@ -216,7 +189,6 @@ class _FoodscreenNew extends State<FoodscreenNew> {
         }
       }
 
-      // Create a simpler widget structure based on category
       Widget content;
 
       switch (categoryIndex) {
@@ -300,6 +272,30 @@ class _FoodscreenNew extends State<FoodscreenNew> {
               FilterSorting(),
               const SizedBox(height: 16),
               _buildSafeWidget(() => FriedChickenRestaurantCol()),
+            ],
+          );
+          break;
+
+        case 7: // Healthy
+          content = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildCategoryHeader('$categoryName Shops'),
+              FilterSorting(),
+              const SizedBox(height: 16),
+              _buildSafeWidget(() => HealthyRestaurantCol()),
+            ],
+          );
+          break;
+
+        case 8: // Juice
+          content = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildCategoryHeader('$categoryName Shops'),
+              FilterSorting(),
+              const SizedBox(height: 16),
+              _buildSafeWidget(() => JuiceRestaurantCol()),
             ],
           );
           break;

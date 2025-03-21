@@ -51,7 +51,6 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Delivery Time and Status
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Column(
@@ -96,12 +95,10 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
               ),
             ),
 
-            // Delivery Progress Tracker
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  // Grab Logo
                   Container(
                     width: 40,
                     height: 40,
@@ -121,7 +118,6 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                     ),
                   ),
 
-                  // Progress line
                   Expanded(
                     child: Container(
                       height: 4,
@@ -140,7 +136,6 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                     ),
                   ),
 
-                  // Restaurant
                   Container(
                     width: 40,
                     height: 40,
@@ -151,7 +146,6 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                     child: const Icon(Icons.restaurant, color: Colors.grey),
                   ),
 
-                  // Progress line
                   Expanded(
                     child: Container(
                       height: 4,
@@ -163,7 +157,6 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                     ),
                   ),
 
-                  // Delivery
                   Container(
                     width: 40,
                     height: 40,
@@ -177,7 +170,6 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                     ),
                   ),
 
-                  // Progress line
                   Expanded(
                     child: Container(
                       height: 4,
@@ -189,7 +181,6 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                     ),
                   ),
 
-                  // Home
                   Container(
                     width: 40,
                     height: 40,
@@ -215,7 +206,6 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
               ),
             ),
 
-            // Restaurant section
             const Divider(height: 1),
             Container(
               padding: const EdgeInsets.all(16),
@@ -251,7 +241,6 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
               ),
             ),
 
-            // Save restaurant section
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -278,7 +267,6 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
               ),
             ),
 
-            // Total section
             const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -327,7 +315,6 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
               ),
             ),
 
-            // Show original price with strikethrough
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
@@ -346,14 +333,11 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
               ),
             ),
 
-            // View order summary button
             const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: TextButton(
-                onPressed: () {
-                  // Navigate to detailed order summary
-                },
+                onPressed: () {},
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -371,10 +355,8 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
               ),
             ),
 
-            // Divider before delivery address
             const Divider(height: 32),
 
-            // Delivery address
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(

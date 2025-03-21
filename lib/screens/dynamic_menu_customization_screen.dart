@@ -38,7 +38,6 @@ class _DynamicMenuCustomizationScreenState
     super.initState();
     _basePrice = widget.menuItem.price;
 
-    // Initialize selection tracking for each category
     if (widget.customizationOptions.containsKey('categories')) {
       final categories = widget.customizationOptions['categories'] as List;
 
@@ -49,13 +48,10 @@ class _DynamicMenuCustomizationScreenState
         final maxSelections =
             category['maxSelections'] as int? ?? (allowMultiple ? 999 : 1);
 
-        // Initialize empty selection set
         _selections[categoryName] = {};
 
-        // Track multiple selection setting
         _multipleSelectionsAllowed[categoryName] = allowMultiple;
 
-        // Track selection limits
         _selectionLimits[categoryName] = {
           'min': minSelections,
           'max': maxSelections,
@@ -66,7 +62,6 @@ class _DynamicMenuCustomizationScreenState
 
   double get totalPrice => _basePrice + _additionalPrice;
 
-  // Update additional price based on all selections
   void _updateAdditionalPrice() {
     double newAdditionalPrice = 0;
 
@@ -77,15 +72,12 @@ class _DynamicMenuCustomizationScreenState
         final categoryName = category['name'] as String;
         final options = category['options'] as List;
 
-        // Get all selected options for this category
         final selectedOptions = _selections[categoryName] ?? {};
 
-        // Add price for each selected option
         for (final option in options) {
           final optionName = option['name'] as String;
 
           if (selectedOptions.contains(optionName)) {
-            // Add the price for this option
             final additionalPrice =
                 option['additionalPrice']?.toDouble() ?? 0.0;
             newAdditionalPrice += additionalPrice;
@@ -99,29 +91,22 @@ class _DynamicMenuCustomizationScreenState
     });
   }
 
-  // Handle option selection/deselection
   void _handleOptionSelection(
     String categoryName,
     String optionName,
     bool isSelected,
   ) {
     setState(() {
-      // Get current selections for this category
       final selectedOptions = _selections[categoryName] ?? {};
 
-      // Check if multiple selections are allowed
       final allowMultiple = _multipleSelectionsAllowed[categoryName] ?? false;
 
-      // Get max selections for this category
       final maxSelections = _selectionLimits[categoryName]?['max'] ?? 1;
 
       if (isSelected) {
-        // If selecting an option
         if (!allowMultiple) {
-          // For single selection categories, clear previous selection
           selectedOptions.clear();
         } else if (selectedOptions.length >= maxSelections) {
-          // If already at max selections, show message and return
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
@@ -134,27 +119,21 @@ class _DynamicMenuCustomizationScreenState
           return;
         }
 
-        // Add the new selection
         selectedOptions.add(optionName);
       } else {
-        // If deselecting, just remove the option
         selectedOptions.remove(optionName);
       }
 
-      // Update the selections map
       _selections[categoryName] = selectedOptions;
     });
 
-    // Update price after selection changes
     _updateAdditionalPrice();
   }
 
-  // Validate that all required selections are made
   bool _validateSelections() {
     bool isValid = true;
     String errorMessage = '';
 
-    // Check each category
     _selectionLimits.forEach((categoryName, limits) {
       final minRequired = limits['min'] ?? 0;
       final selected = _selections[categoryName]?.length ?? 0;
@@ -184,23 +163,18 @@ class _DynamicMenuCustomizationScreenState
     return isValid;
   }
 
-  // Prepare selections as a map to pass back to the parent widget
   Map<String, dynamic> _getCustomizationResults() {
-    // Convert sets to lists for easier handling
     final Map<String, dynamic> result = {};
 
     _selections.forEach((categoryName, selections) {
-      // For categories with multiple selections, store as list
       result[categoryName.toLowerCase().replaceAll(' ', '_')] =
           selections.toList();
     });
 
-    // Add note to restaurant if provided
     if (_noteController.text.isNotEmpty) {
       result['note'] = _noteController.text;
     }
 
-    // Add price information
     result['additionalPrice'] = _additionalPrice;
     result['totalPrice'] = totalPrice;
 
@@ -228,7 +202,6 @@ class _DynamicMenuCustomizationScreenState
       ),
       body: Column(
         children: [
-          // Menu item image and details
           Container(
             width: double.infinity,
             height: 200,
@@ -246,7 +219,6 @@ class _DynamicMenuCustomizationScreenState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Dish description
                   Text(
                     widget.menuItem.description,
                     style: const TextStyle(
@@ -257,11 +229,9 @@ class _DynamicMenuCustomizationScreenState
                   ),
                   const SizedBox(height: 24),
 
-                  // Build customization categories dynamically
                   if (widget.customizationOptions.containsKey('categories'))
                     ..._buildCategories(),
 
-                  // Note to restaurant - common for all items
                   _buildSectionTitle('Note to restaurant', 'Optional'),
                   TextField(
                     controller: _noteController,
@@ -275,7 +245,6 @@ class _DynamicMenuCustomizationScreenState
                     maxLines: 2,
                   ),
 
-                  // Spacing for bottom button
                   const SizedBox(height: 80),
                 ],
               ),
@@ -329,12 +298,10 @@ class _DynamicMenuCustomizationScreenState
               onPressed: () {
                 HapticFeedback.mediumImpact();
 
-                // Validate all required selections are made
                 if (!_validateSelections()) {
                   return;
                 }
 
-                // Add to cart and close the screen
                 widget.onAddToCart(widget.menuItem, _getCustomizationResults());
                 Navigator.pop(context);
               },
@@ -363,7 +330,6 @@ class _DynamicMenuCustomizationScreenState
     );
   }
 
-  // Build all customization categories
   List<Widget> _buildCategories() {
     final List<Widget> categories = [];
     final categoriesList = widget.customizationOptions['categories'] as List;
@@ -381,7 +347,6 @@ class _DynamicMenuCustomizationScreenState
     return categories;
   }
 
-  // Build a single category of options
   Widget _buildOptionsGroup(String categoryName, List options) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -433,7 +398,6 @@ class _DynamicMenuCustomizationScreenState
     );
   }
 
-  // Helper widget to build section titles
   Widget _buildSectionTitle(String title, String subtitle) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
