@@ -62,33 +62,28 @@ class _MessagesScreenState extends State<MessagesScreen>
         children: [
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            height: 50, // Set a fixed height
+            height: 50,
             decoration: BoxDecoration(
-              color: const Color(0xFFE8F6F8), // Light blue/gray background
+              color: const Color(0xFFE8F6F8),
               borderRadius: BorderRadius.circular(25),
             ),
             child: TabBar(
               controller: _tabController,
-              // Use indicator size to cover the full tab
               indicator: BoxDecoration(
-                color: const Color(0XFFFF6B35), // Dark green active tab
+                color: const Color(0XFFFF6B35),
                 borderRadius: BorderRadius.circular(25),
               ),
-              // Make indicator cover full tab
               indicatorSize: TabBarIndicatorSize.tab,
-              labelColor: Colors.white, // White text when selected
-              unselectedLabelColor:
-                  Colors.black, // Black text when not selected
+              labelColor: Colors.white,
+              unselectedLabelColor: Colors.black,
               labelStyle: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
               ),
-              // Important: Set tab padding to 0 to make tabs fill all available space
               padding: EdgeInsets.zero,
               indicatorPadding: EdgeInsets.zero,
               labelPadding: EdgeInsets.zero,
               tabs: [
-                // Use Tab with fixed width to ensure equal tab widths
                 SizedBox(
                   width: double.infinity,
                   child: const Tab(text: 'Chats'),

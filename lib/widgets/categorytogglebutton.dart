@@ -13,7 +13,7 @@ class Categorytogglebutton extends StatefulWidget {
     {'label': 'Fast Food', 'icon': 'assets/icons/burger.png'},
     {'label': 'Fried Chicken', 'icon': 'assets/icons/chicken.png'},
     {'label': 'Healthy', 'icon': 'assets/icons/healthy-food.png'},
-    {'label': 'Spicy Salad', 'icon': 'assets/icons/animals.png'},
+    // {'label': 'Spicy Salad', 'icon': 'assets/icons/animals.png'},
     {'label': 'Juice', 'icon': 'assets/icons/watermelon-juice.png'},
     {'label': 'Bakery', 'icon': 'assets/icons/pastry.png'},
     {'label': 'Bubble Tea', 'icon': 'assets/icons/bubble-tea.png'},
