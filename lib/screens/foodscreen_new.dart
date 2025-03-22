@@ -301,7 +301,6 @@ class _FoodscreenNew extends State<FoodscreenNew> {
           break;
 
         default:
-          // Simplified default template
           content = Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -330,13 +329,11 @@ class _FoodscreenNew extends State<FoodscreenNew> {
           );
       }
 
-      // Wrap content in a scroll view with key for better performance
       return SingleChildScrollView(
         key: ValueKey('category_$categoryIndex'),
         child: content,
       );
     } catch (e) {
-      // Return a fallback widget if anything goes wrong
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -349,7 +346,6 @@ class _FoodscreenNew extends State<FoodscreenNew> {
     }
   }
 
-  // Safe widget builder to prevent crashes
   Widget _buildSafeWidget(Widget Function() builder) {
     try {
       return builder();
@@ -371,7 +367,6 @@ class _FoodscreenNew extends State<FoodscreenNew> {
     }
   }
 
-  // Helper method for category headers
   Widget _buildCategoryHeader(String title) {
     return Visibility(
       visible: false,
@@ -393,7 +388,7 @@ class _FoodscreenNew extends State<FoodscreenNew> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
-        physics: const NeverScrollableScrollPhysics(), // Prevent main scroll
+        physics: const NeverScrollableScrollPhysics(),
         slivers: <Widget>[
           SliverAppBar(
             pinned: true,
@@ -492,12 +487,10 @@ class _FoodscreenNew extends State<FoodscreenNew> {
             ),
           ),
 
-          // The rest of your sliver content
           SliverFillRemaining(
             hasScrollBody: true,
             child: Column(
               children: [
-                // Toggle buttons and category buttons
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
@@ -514,17 +507,13 @@ class _FoodscreenNew extends State<FoodscreenNew> {
                 ),
                 const SizedBox(height: 10),
 
-                // Instead of conditionally showing either default content or PageView,
-                // we now use a PageView with default content as the first page
                 Expanded(
                   child: PageView(
                     controller: _pageController,
-                    physics: NeverScrollableScrollPhysics(), // Disable swiping
+                    physics: NeverScrollableScrollPhysics(),
                     onPageChanged: _onPageChanged,
                     children: [
-                      // First page is always the default page
                       _buildDefaultContent(),
-                      // Then add all category pages
                       ...List.generate(
                         _categoryToggle.categoryList.length,
                         (index) => _buildCategoryContent(index),
