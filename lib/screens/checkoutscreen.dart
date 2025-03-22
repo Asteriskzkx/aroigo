@@ -1,6 +1,8 @@
 import 'package:aroigo/screens/order_confirmation_screen.dart';
+import 'package:aroigo/widgets/order_tracking_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import '../model/menu_model.dart';
 import '../model/restaurant_model.dart';
 
@@ -194,6 +196,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           onPressed: () {
             HapticFeedback.mediumImpact();
 
+            final orderTracker = Provider.of<OrderTrackingProvider>(
+              context,
+              listen: false,
+            );
+
+            orderTracker.startOrderTracking(
+              restaurant: widget.restaurant,
+              totalAmount: _total,
+              deliveryAddress: '00/00 Ban Uea Athorn Rangsit-Khlong 90/80',
+            );
+
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text(
@@ -208,18 +221,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               context,
               PageRouteBuilder(
                 pageBuilder:
-                    (
-                      context,
-                      animation,
-                      secondaryAnimation,
-                    ) => OrderConfirmationScreen(
-                      restaurant: widget.restaurant,
-                      totalAmount: _total,
-                      orderId:
-                          'GF-${DateTime.now().millisecondsSinceEpoch.toString().substring(7, 10)}',
-                      deliveryAddress:
-                          '00/00 Ban Uea Athorn Rangsit-Khlong 90/80',
-                    ),
+                    (context, animation, secondaryAnimation) =>
+                        OrderConfirmationScreen(
+                          restaurant: widget.restaurant,
+                          totalAmount: _total,
+                          orderId: orderTracker.orderId,
+                          deliveryAddress:
+                              '00/00 Ban Uea Athorn Rangsit-Khlong 90/80',
+                        ),
                 transitionsBuilder: (
                   context,
                   animation,
